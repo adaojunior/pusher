@@ -2,7 +2,7 @@
 library pusher.validate;
 
 
-final RegExp SOCKET_ID_REGEX = new RegExp("\A\d+\.\d+\z");
+final RegExp SOCKET_ID_REGEX = new RegExp(r'^\d+\.\d+$');
 
 /// A regular expression to check that a channel name is in a format allowed and accepted by Pusher.
 final RegExp CHANNEL_NAME_REGEX = new RegExp(r'^[A-Za-z0-9_\-=@,.;]+$');

@@ -43,6 +43,10 @@ void main() {
       expect(() => validateSocketId(''),throwsFormatException);
     });
 
+    test('Should not throw a exception',(){
+      expect(() => validateSocketId('444.444'), returnsNormally);
+    });
+
   });
 
   group('validateChannelName()', ()
