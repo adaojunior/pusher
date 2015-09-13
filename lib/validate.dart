@@ -11,7 +11,7 @@ final int CHANNEL_NAME_MAX_LENGTH = 164;
 
 /// Validate a socket_id value
 void validateSocketId(String socketId){
-  if(socketId.isEmpty ||  SOCKET_ID_REGEX.hasMatch(socketId) == false)
+  if(socketId != null &&  SOCKET_ID_REGEX.hasMatch(socketId) == false)
     throw new FormatException("socket_id ${socketId} was not in the form: ${SOCKET_ID_REGEX.toString()}");
 }
 

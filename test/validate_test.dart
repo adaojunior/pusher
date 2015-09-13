@@ -47,6 +47,10 @@ void main() {
       expect(() => validateSocketId('444.444'), returnsNormally);
     });
 
+    test('It can be null',(){
+      expect(() => validateSocketId(null), returnsNormally);
+    });
+
   });
 
   group('validateChannelName()', ()
