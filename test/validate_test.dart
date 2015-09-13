@@ -77,4 +77,16 @@ void main() {
     });
   });
 
+
+  group('validateListOfChannelName()', ()
+  {
+    test('Should not throw a exception', () {
+      expect(() => validateListOfChannelNames(['private-channel','private-message']), returnsNormally);
+    });
+
+    test('Should throw a FormatException', () {
+      expect(() => validateListOfChannelNames(['private-channel',':private-message']), throwsFormatException);
+    });
+  });
+
 }

@@ -22,3 +22,8 @@ void validateChannelName(String name){
   else if(CHANNEL_NAME_REGEX.hasMatch(name) == false)
     throw new FormatException("channel name ${name} was not in the form: ${CHANNEL_NAME_REGEX.toString()}");
 }
+
+/// Validate a list of channel names
+void validateListOfChannelNames(List<String> names){
+  names.forEach(validateChannelName);
+}
