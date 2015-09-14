@@ -5,6 +5,7 @@ library pusher.test;
 
 import 'package:pusher/pusher.dart';
 import 'package:test/test.dart';
+import 'dart:convert' show JSON;
 
 void main() {
 
@@ -39,8 +40,51 @@ void main() {
       options = new TriggerOptions(socketId:socketId);
     });
 
-    test('Should get socketId',(){
+    test('Should get `socketId`',(){
       expect(options.socketId,socketId);
+    });
+
+  });
+
+  group('TriggerBody',(){
+
+    TriggerBody body;
+    String name;
+    String data;
+    List<String> channels;
+    String socketId;
+
+    setUp((){
+      name = 'my-event';
+      data = 'Hello World';
+      channels = ['my-channel'];
+      socketId = '444.444';
+      body = new TriggerBody(name:name,data:data,channels:channels,socketId:socketId);
+    });
+
+    test('Should get `name`',(){
+      expect(body.name,name);
+    });
+
+    test('Should get `data`',(){
+      expect(body.data,data);
+    });
+
+    test('Should get `channels`',(){
+      expect(body.channels,channels);
+    });
+
+    test('Should get `socketId`',(){
+      expect(body.socketId,socketId);
+    });
+
+    test('Should get a JSON encoded body',(){
+      expect(body.toJson(),JSON.encode({
+        'name':name,
+        'data':data,
+        'channels':channels,
+        'socketId':socketId
+      }));
     });
 
   });
