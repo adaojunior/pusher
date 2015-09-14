@@ -2,7 +2,10 @@
 library pusher;
 
 import 'package:pusher/helper.dart';
+import 'package:pusher/validate.dart';
 import 'package:http/http.dart' show Request,StreamedResponse;
+import 'dart:convert' show JSON;
+import 'dart:async';
 
 const String DEFAULT_HOST = "api.pusherapp.com";
 const int DEFAULT_HTTPS_PORT = 443;
@@ -29,6 +32,49 @@ class PusherOptions {
   get port => _port;
 }
 
+class TriggerOptions {
+
+  String _socketId = null;
+
+  TriggerOptions({String socketId}){
+    this._socketId = socketId;
+  }
+
+  get socketId => _socketId;
+}
+
+class TriggerBody {
+
+  String name;
+
+  String data;
+
+  List<String> channels;
+
+  String socketId;
+
+  TriggerBody({this.name,this.data,this.channels,this.socketId});
+
+  toJson(){
+    return JSON.encode({
+      'name':this.name,
+      'data':this.data,
+      'channels':this.channels,
+      'socketId':this.socketId
+    });
+  }
+}
+
+class TriggerResponse {
+
+  final String body;
+
+  final int statusCode;
+
+  TriggerResponse(this.body,this.statusCode);
+
+  String toString() => this.body;
+}
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
@@ -64,6 +110,23 @@ class Pusher {
     print(await response.stream.bytesToString());
   }
 
+  Future<TriggerResponse> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
+    options = options == null ? new TriggerOptions() : options;
+    validateListOfChannelNames(channels);
+    validateSocketId(options.socketId);
+    TriggerBody body = new TriggerBody(name:event,data:data.toString(),channels:channels);
+    if(options.socketId != null){
+      body.socketId = options.socketId;
+    }
+    return _executeTrigger(channels,event,body);
+  }
+
+  Future<TriggerResponse> _executeTrigger(List<String> channels,String event,TriggerBody body) async {
+    Request request = _createAuthenticatedRequest('POST',"/events",null,body);
+    StreamedResponse response =  await request.send();
+    return new TriggerResponse(await response.stream.bytesToString(), response.statusCode);
+  }
+
   int _secondsSinceEpoch(){
     return (new DateTime.now().toUtc().millisecondsSinceEpoch * 0.001).toInt();
   }
@@ -77,14 +140,15 @@ class Pusher {
   }
 
   /// todo(): refactor
-  Request _createAuthenticatedRequest(String method,String resource,Map<String,String> parameters,body){
+  Request _createAuthenticatedRequest(String method,String resource,Map<String,String> parameters,TriggerBody body){
 
+    parameters = parameters == null ? new Map<String,String>() : parameters;
     parameters['auth_key'] = this._key;
     parameters['auth_timestamp'] = _secondsSinceEpoch().toString();
     parameters['auth_version'] = '1.0';
 
     if(body != null){
-      throw new Exception("Not implemented");
+      parameters['body_md5'] = getMd5Hash(body.toJson());
     }
 
     if(resource.startsWith('/')){
@@ -101,7 +165,8 @@ class Pusher {
         "${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}"
     );
     Request request = new Request(method,uri);
-
+    request.headers['Content-Type'] = 'application/json';
+    request.body = body.toJson();
     return request;
   }
 }

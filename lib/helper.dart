@@ -12,3 +12,10 @@ String getHmac256(String secret, String toSign){
   var digest = hmac.close();
   return CryptoUtils.bytesToHex(digest);
 }
+
+String getMd5Hash(String data){
+  var md5 = new MD5();
+  md5.add(UTF8.encode(data));
+  var digest = md5.close();
+  return CryptoUtils.bytesToHex(digest);
+}
