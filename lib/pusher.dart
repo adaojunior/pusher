@@ -177,9 +177,7 @@ class Pusher {
 
     String authSignature = getHmac256(this._secret,toSign);
 
-    Uri uri = Uri.parse(
-        "${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}"
-    );
+    Uri uri = Uri.parse("${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}");
     Request request = new Request(method,uri);
     request.headers['Content-Type'] = 'application/json';
     request.body = body.toJson();
