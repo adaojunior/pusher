@@ -52,16 +52,16 @@ class TriggerOptions {
 class TriggerBody {
 
   /// The name of the event
-  String name;
+  final String name;
 
   /// The event data
-  String data;
+  final String data;
 
   /// The channels the event should be triggered on.
-  List<String> channels;
+  final List<String> channels;
 
   /// The id of a socket to be excluded from receiving the event.
-  String socketId;
+  final String socketId;
 
   TriggerBody({this.name,this.data,this.channels,this.socketId});
 
