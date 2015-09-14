@@ -136,6 +136,8 @@ class Pusher {
 
   Future<TriggerResponse> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
     options = options == null ? new TriggerOptions() : options;
+    validateListOfChannelNames(channels);
+    validateSocketId(options.socketId);
     TriggerBody body = new TriggerBody(name:event,data:data.toString(),channels:channels,socketId:options.socketId);
     return _executeTrigger(channels,event,body);
   }
