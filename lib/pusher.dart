@@ -63,7 +63,10 @@ class TriggerBody {
   /// The id of a socket to be excluded from receiving the event.
   final String socketId;
 
-  TriggerBody({this.name,this.data,this.channels,this.socketId});
+  TriggerBody({this.name,this.data,this.channels,this.socketId}){
+    validateListOfChannelNames(this.channels);
+    validateSocketId(this.socketId);
+  }
 
   /// Gets a Map version of the body
   Map<String,dynamic> toMap(){
@@ -133,12 +136,7 @@ class Pusher {
 
   Future<TriggerResponse> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
     options = options == null ? new TriggerOptions() : options;
-    validateListOfChannelNames(channels);
-    validateSocketId(options.socketId);
-    TriggerBody body = new TriggerBody(name:event,data:data.toString(),channels:channels);
-    if(options.socketId != null){
-      body.socketId = options.socketId;
-    }
+    TriggerBody body = new TriggerBody(name:event,data:data.toString(),channels:channels,socketId:options.socketId);
     return _executeTrigger(channels,event,body);
   }
 
