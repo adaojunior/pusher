@@ -29,4 +29,20 @@ void main() {
 
   });
 
+  group('TriggerOptions',(){
+
+    TriggerOptions options;
+    String socketId;
+
+    setUp((){
+      socketId = '444.444';
+      options = new TriggerOptions(socketId:socketId);
+    });
+
+    test('Should get socketId',(){
+      expect(options.socketId,socketId);
+    });
+
+  });
+
 }
