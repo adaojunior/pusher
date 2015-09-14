@@ -164,7 +164,7 @@ class Pusher {
     parameters['auth_version'] = '1.0';
 
     if(body != null){
-      parameters['body_md5'] = getMd5Hash(body.toJson());
+      parameters['body_md5'] = body.toMD5();
     }
 
     if(resource.startsWith('/')){
