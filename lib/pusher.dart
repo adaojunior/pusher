@@ -65,7 +65,7 @@ class TriggerBody {
 
   TriggerBody({this.name,this.data,this.channels,this.socketId});
 
-  /// Gets the JSON enconded payload.
+  /// Gets the JSON enconded body.
   toJson(){
     return JSON.encode({
       'name':this.name,
@@ -73,6 +73,11 @@ class TriggerBody {
       'channels':this.channels,
       'socketId':this.socketId
     });
+  }
+
+  /// Gets the MD5 encoded body
+  String toMD5(){
+    return getMd5Hash(toJson());
   }
 }
 

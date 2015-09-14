@@ -87,6 +87,9 @@ void main() {
       }));
     });
 
+    test('Should get a MD5 encoded body',(){
+      expect(body.toMD5(),'641c5a9f422d824e5ee6070df4cd3f1e');
+    });
   });
 
 }
