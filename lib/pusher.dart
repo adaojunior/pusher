@@ -65,14 +65,19 @@ class TriggerBody {
 
   TriggerBody({this.name,this.data,this.channels,this.socketId});
 
-  /// Gets the JSON enconded body.
-  toJson(){
-    return JSON.encode({
+  /// Gets a Map version of the body
+  Map<String,dynamic> toMap(){
+    return {
       'name':this.name,
       'data':this.data,
       'channels':this.channels,
       'socketId':this.socketId
-    });
+    };
+  }
+
+  /// Gets the JSON enconded body.
+  toJson(){
+    return JSON.encode(toMap());
   }
 
   /// Gets the MD5 encoded body

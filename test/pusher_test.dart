@@ -78,6 +78,15 @@ void main() {
       expect(body.socketId,socketId);
     });
 
+    test('Should get a body Map',(){
+      expect(body.toMap(),{
+        'name':name,
+        'data':data,
+        'channels':channels,
+        'socketId':socketId
+      });
+    });
+
     test('Should get a JSON encoded body',(){
       expect(body.toJson(),JSON.encode({
         'name':name,
