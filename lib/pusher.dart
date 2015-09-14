@@ -14,7 +14,9 @@ const int DEFAULT_HTTP_PORT = 80;
 /// Options to be set on the [Pusher] instance.
 class PusherOptions {
 
+  /// Defines a value indicating whether call to the API are over HTTP or HTTPS.
   bool _encrypted;
+
   int _port = DEFAULT_HTTP_PORT;
 
   PusherOptions({bool encrypted:false,int port}){
@@ -32,29 +34,38 @@ class PusherOptions {
   get port => _port;
 }
 
+/// Options to be set on the trigger method.
 class TriggerOptions {
 
+  /// Socket id to be excluded from receiving event.
   String _socketId = null;
 
   TriggerOptions({String socketId}){
     this._socketId = socketId;
   }
 
+  /// Returns the socket id
   get socketId => _socketId;
 }
 
+/// Represents the payload to be sent when triggering events
 class TriggerBody {
 
+  /// The name of the event
   String name;
 
+  /// The event data
   String data;
 
+  /// The channels the event should be triggered on.
   List<String> channels;
 
+  /// The id of a socket to be excluded from receiving the event.
   String socketId;
 
   TriggerBody({this.name,this.data,this.channels,this.socketId});
 
+  /// Gets the JSON enconded payload.
   toJson(){
     return JSON.encode({
       'name':this.name,
