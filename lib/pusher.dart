@@ -100,6 +100,16 @@ class TriggerResponse {
   String toString() => this.body;
 }
 
+// todo(): Maybe I should call it Member
+class User {
+
+  final String id;
+
+  final Map<String,String> info;
+
+  User(this.id,this.info);
+}
+
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
 class Pusher {
@@ -124,6 +134,29 @@ class Pusher {
     String schema = _options.encrypted ? 'https' : 'http';
     String port = _options.port == 80 ? '' : ":${_options.port}";
     return "${schema}://${DEFAULT_HOST}${port}";
+  }
+
+  /// Authenticates the subscription request for a presence channel.
+  // todo(): presence channels name's must start with `presence-`
+  // https://pusher.com/docs/client_api_guide/client_presence_channels
+  // todo(): better implementation of User to Json.
+  String authenticate(String channel,String socketId,[User user]){
+    validateChannelName(channel);
+    validateSocketId(socketId);
+    String tosign;
+    String token;
+
+    if(user == null) {
+      tosign = "${socketId}:${channel}";
+      token = "${this._key}:${getHmac256(_secret, tosign)}";
+      return JSON.encode({'auth':token});
+    }
+    else{
+      String data = JSON.encode({'user_id':user.id,'user_info':user.info});
+      tosign = "${socketId}:${channel}:${data}";
+      token = "${this._key}:${getHmac256(_secret, tosign)}";
+      return JSON.encode({'auth':token,'channel_data':data});
+    }
   }
 
   get(String resource,[Map<String,String> parameters]) async{
