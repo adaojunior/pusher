@@ -3,7 +3,7 @@
 
 library pusher.validate.test;
 
-import 'package:pusher/src/validate.dart';
+import 'package:pusher/src/validation.dart';
 import 'package:test/test.dart';
 
 String str_repeat(String piece, int multiplier){

@@ -1,8 +1,8 @@
 
 library pusher;
 
-import './helper.dart';
-import './validate.dart';
+import 'utils.dart';
+import 'validation.dart';
 import 'package:http/http.dart' show Request,StreamedResponse;
 import 'dart:convert' show JSON;
 import 'dart:async';
