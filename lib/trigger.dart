@@ -55,6 +55,7 @@ class TriggerBody {
   }
 }
 
+// todo(): fix inconsistency with [Response]
 class TriggerResponse {
 
   final String body;

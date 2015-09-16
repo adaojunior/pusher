@@ -6,6 +6,11 @@ library pusher.test;
 import 'package:pusher/pusher.dart';
 import 'package:test/test.dart';
 import 'dart:convert' show JSON;
+import 'dart:io' show Platform;
+
+final PUSHER_APP_ID = Platform.environment['PUSHER_APP_ID'];
+final PUSHER_APP_KEY = Platform.environment['PUSHER_APP_KEY'];
+final PUSHER_APP_SECRET = Platform.environment['PUSHER_APP_SECRET'];
 
 void main() {
 
@@ -122,4 +127,39 @@ void main() {
 
   });
 
+  group('Pusher',(){
+
+    Pusher pusher;
+
+    setUp((){
+      pusher = new Pusher(PUSHER_APP_ID,PUSHER_APP_KEY,PUSHER_APP_SECRET);
+    });
+
+    test('Should get `/channels`',() async {
+      Result result = await pusher.get('/channels');
+      expect(result.status,200);
+    });
+
+    test('Should trigger events',() async {
+      TriggerResponse respose = await pusher.trigger(['channel-test'],'event-test',{'message':'Hello World!'});
+      expect(respose.statusCode,200);
+    });
+
+    test('Should authenticate socketId',(){
+      String key = 'thisisaauthkey';
+      Pusher instance = new Pusher('1',key, 'thisisasecret');
+      String auth = instance.authenticate('test_channel','74124.3251944');
+      String expected = '{"auth":"${key}:f8390ffe4df18cc755d3191b9db75182c71354e0b3ad7be1d186ac86f3c0fc4b"}';
+      expect(auth,expected);
+    });
+
+    test('Should authenticate presence',(){
+      String key = 'thisisaauthkey';
+      Pusher instance = new Pusher('1',key, 'thisisasecret');
+      String auth = instance.authenticate('presence-test_channel','74124.3251944',new User('1',{'name':'Adao'}));
+      String expected = '{"auth":"${key}:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2","channel_data":"{\\\"user_id\\\":\\\"1\\\",\\\"user_info\\\":{\\\"name\\\":\\\"Adao\\\"}}"}';
+      expect(auth,expected);
+    });
+
+  });
 }
