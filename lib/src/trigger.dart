@@ -51,7 +51,7 @@ class TriggerBody {
 
   /// Gets the MD5 encoded body
   String toMD5(){
-    return getMd5Hash(toJson());
+    return MD5Hash(toJson());
   }
 }
 

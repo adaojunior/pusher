@@ -85,13 +85,13 @@ class Pusher {
 
     if(user == null) {
       tosign = "${socketId}:${channel}";
-      token = "${this._key}:${getHmac256(_secret, tosign)}";
+      token = "${this._key}:${HMAC256(_secret, tosign)}";
       return JSON.encode({'auth':token});
     }
     else{
       String data = JSON.encode({'user_id':user.id,'user_info':user.info});
       tosign = "${socketId}:${channel}:${data}";
-      token = "${this._key}:${getHmac256(_secret, tosign)}";
+      token = "${this._key}:${HMAC256(_secret, tosign)}";
       return JSON.encode({'auth':token,'channel_data':data});
     }
   }
@@ -153,7 +153,7 @@ class Pusher {
     String path = "/apps/${this._id}/${resource}";
     String toSign = "${method}\n${path}\n${queryString}";
 
-    String authSignature = getHmac256(this._secret,toSign);
+    String authSignature = HMAC256(this._secret,toSign);
 
     Uri uri = Uri.parse("${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}");
     Request request = new Request(method,uri);
