@@ -101,4 +101,25 @@ void main() {
     });
   });
 
+  group('Result',(){
+    Result result;
+    int status;
+    String message;
+
+    setUp((){
+      status = 200;
+      message = '{}';
+      result = new Result(status,message);
+    });
+
+    test('Should get `status`',(){
+      expect(result.status,status);
+    });
+
+    test('Should get `message`',(){
+      expect(result.message,message);
+    });
+
+  });
+
 }

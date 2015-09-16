@@ -7,6 +7,8 @@ import 'package:http/http.dart' show Request,StreamedResponse;
 import 'dart:convert' show JSON;
 import 'dart:async';
 
+part 'result.dart';
+
 const String DEFAULT_HOST = "api.pusherapp.com";
 const int DEFAULT_HTTPS_PORT = 443;
 const int DEFAULT_HTTP_PORT = 80;
@@ -159,12 +161,15 @@ class Pusher {
     }
   }
 
-  get(String resource,[Map<String,String> parameters]) async{
+  Future<Result> get(String resource,[Map<String,String> parameters]) async{
 
     parameters = (parameters != null) ? parameters : new Map<String,String>();
     Request request =_createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response =  await request.send();
-    print(await response.stream.bytesToString());
+    return new Result(
+        response.statusCode,
+        await response.stream.bytesToString()
+    );
   }
 
   Future<TriggerResponse> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
@@ -218,7 +223,9 @@ class Pusher {
     Uri uri = Uri.parse("${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}");
     Request request = new Request(method,uri);
     request.headers['Content-Type'] = 'application/json';
-    request.body = body.toJson();
+    if(body != null) {
+      request.body = body.toJson();
+    }
     return request;
   }
 }
