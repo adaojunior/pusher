@@ -141,8 +141,8 @@ void main() {
     });
 
     test('Should trigger events',() async {
-      TriggerResponse respose = await pusher.trigger(['channel-test'],'event-test',{'message':'Hello World!'});
-      expect(respose.statusCode,200);
+      Result respose = await pusher.trigger(['channel-test'],'event-test',{'message':'Hello World!'});
+      expect(respose.status,200);
     });
 
     test('Should authenticate socketId',(){

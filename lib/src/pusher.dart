@@ -107,7 +107,7 @@ class Pusher {
     );
   }
 
-  Future<TriggerResponse> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
+  Future<Result> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
     options = options == null ? new TriggerOptions() : options;
     validateListOfChannelNames(channels);
     validateSocketId(options.socketId);
@@ -115,10 +115,10 @@ class Pusher {
     return _executeTrigger(channels,event,body);
   }
 
-  Future<TriggerResponse> _executeTrigger(List<String> channels,String event,TriggerBody body) async {
+  Future<Result> _executeTrigger(List<String> channels,String event,TriggerBody body) async {
     Request request = _createAuthenticatedRequest('POST',"/events",null,body);
     StreamedResponse response =  await request.send();
-    return new TriggerResponse(await response.stream.bytesToString(), response.statusCode);
+    return new Result(response.statusCode,await response.stream.bytesToString());
   }
 
   int _secondsSinceEpoch(){

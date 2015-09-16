@@ -55,14 +55,3 @@ class TriggerBody {
   }
 }
 
-// todo(): fix inconsistency with [Response]
-class TriggerResponse {
-
-  final String body;
-
-  final int statusCode;
-
-  TriggerResponse(this.body,this.statusCode);
-
-  String toString() => this.body;
-}

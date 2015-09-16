@@ -1,5 +1,6 @@
 part of pusher;
 
+// todo(): call it Response
 class Result {
 
   final int _status;
@@ -10,4 +11,6 @@ class Result {
   get status => this._status;
 
   get message => this._message;
+
+  String toString() => this.message;
 }
