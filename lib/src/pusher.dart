@@ -38,7 +38,7 @@ class PusherOptions {
   get port => _port;
 }
 
-// todo(): Maybe I should call it Member
+// todo(): Maybe I should call it Member or Client
 class User {
 
   final String id;
