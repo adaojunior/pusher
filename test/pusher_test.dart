@@ -4,6 +4,7 @@
 library pusher.test;
 
 import 'package:pusher/pusher.dart';
+import 'package:pusher/src/pusher.dart' show TriggerBody,DEFAULT_HTTP_PORT,DEFAULT_HTTPS_PORT;
 import 'package:test/test.dart';
 import 'dart:convert' show JSON;
 import 'dart:io' show Platform;

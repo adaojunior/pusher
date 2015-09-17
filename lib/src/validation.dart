@@ -1,5 +1,4 @@
-
-library pusher.validation;
+part of pusher;
 
 final RegExp SOCKET_ID_REGEX = new RegExp(r'^\d+\.\d+$');
 

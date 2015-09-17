@@ -1,8 +1,4 @@
-
-library pusher.server.utils;
-
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
+part of pusher;
 
 String HMAC256(String secret, String toSign){
   List<int> secretBytes = UTF8.encode(secret);
