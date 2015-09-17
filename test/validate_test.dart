@@ -3,7 +3,7 @@
 
 library pusher.validate.test;
 
-import 'package:pusher/src/validation.dart';
+import 'package:pusher/src/pusher.dart' show validateSocketId,validateChannelName,validateListOfChannelNames,CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
 
 String str_repeat(String piece, int multiplier){
