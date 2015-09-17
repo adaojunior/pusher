@@ -3,7 +3,8 @@
 .pub/
 build/
 packages
-
+.packages
+doc/api
 # Or the files created by dart2js.
 *.dart.js
 *.js_

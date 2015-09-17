@@ -1,0 +1,12 @@
+name: pusher
+description: Pusher HTTP Dart Library
+author: Adao Junior <itsjunnior@gmail.com>
+homepage: https://github.com/adaojunior/pusher
+version: 0.1.0
+environment:
+  sdk: ">=1.9.0 <2.0.0"
+dependencies:
+  crypto: "^0.9.0"
+  http: "^0.11.3+2"
+dev_dependencies:
+  test: '>=0.12.0 <0.13.0'
