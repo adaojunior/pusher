@@ -98,7 +98,7 @@ Result result = await pusher.get("/channels");
 ```
 You can provide additional parameters to filter the list of channels that is returned.
 
-```
+```dart
 Result result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
 ```
 
@@ -106,14 +106,14 @@ Result result = await pusher.get("/channels", new { filter_by_prefix = "presence
 
 Retrive information about a single channel:
 
-```
+```dart
 Result result = await pusher.get("/channels/my_channel");
 ```
 #### Fetch a list of users on a presence channel
 
 Retrive a list of users that are on a presence channel:
 
-```
+```dart
 Result result = await pusher.get('/channels/presence-channel/users');
 ```
 ## License
