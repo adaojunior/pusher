@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart' show HMAC,SHA256,MD5,CryptoUtils;
 import 'package:http/http.dart' show Request,StreamedResponse;
 import 'dart:convert' show JSON,UTF8;
 import 'dart:async' show Future;
+import 'dart:collection' show SplayTreeMap;
 
 part 'validation.dart';
 part 'result.dart';
@@ -137,7 +138,7 @@ class Pusher {
   /// todo(): refactor
   Request _createAuthenticatedRequest(String method,String resource,Map<String,String> parameters,TriggerBody body){
 
-    parameters = parameters == null ? new Map<String,String>() : parameters;
+    parameters = parameters == null ? new SplayTreeMap() : new SplayTreeMap.from(parameters);
     parameters['auth_key'] = this._key;
     parameters['auth_timestamp'] = _secondsSinceEpoch().toString();
     parameters['auth_version'] = '1.0';
