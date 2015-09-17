@@ -80,6 +80,27 @@ class Pusher {
   }
 
   /// Authenticates the subscription request for a presence channel.
+  ///
+  /// Pusher provides a mechanism for authenticating a user's access to a channel at the point of subscription.
+  ///
+  /// This can be used both to restrict access to private channels,
+  /// and in the case of presence channels notify subscribers of who else is also subscribed via presence events.
+  ///
+  /// This library provides a mechanism for generating an authentication signature to send back to the client and authorize them.
+  ///
+  /// For more information see [docs](https://pusher.com/docs/authenticating_users).
+  ///
+  /// ## Private channels
+  ///
+  ///      String socketId = '74124.3251944';
+  ///      String auth = pusher.authenticate('test_channel',socketId);
+  /// ##  Authenticating presence channels
+  ///
+  /// Using presence channels is similar to private channels, but in order to identify a user,
+  /// clients are sent a user_id and, optionally, custom data.
+  ///      String socketId = '74124.3251944';
+  ///      User user = new User('1',{'name':'Adao'});
+  ///      String auth = pusher.authenticate('presence-test_channel',socketId,user);
   // todo(): presence channels name's must start with `presence-`
   // https://pusher.com/docs/client_api_guide/client_presence_channels
   // todo(): better implementation of User to Json.
@@ -102,6 +123,20 @@ class Pusher {
     }
   }
 
+  /// Allows you to query Pusher API to retrieve information about your application's channels,
+  /// their individual properties, and, for presence-channels, the users currently subscribed to them.
+  ///
+  /// ## List channels
+  /// You can get a list of channels that are present within your application:
+  ///      Result result = await pusher.get("/channels");
+  /// You can provide additional parameters to filter the list of channels that is returned.
+  ///      Result result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
+  /// ## Fetch channel information
+  /// Retrive information about a single channel:
+  ///      Result result = await pusher.get("/channels/my_channel");
+  /// ## Fetch a list of users on a presence channel
+  /// Retrive a list of users that are on a presence channel:
+  ///      Result result = await pusher.get('/channels/presence-channel/users');
   Future<Result> get(String resource,[Map<String,String> parameters]) async{
 
     parameters = (parameters != null) ? parameters : new Map<String,String>();
@@ -113,6 +148,12 @@ class Pusher {
     );
   }
 
+  /// Triggers an event on one or more channels.
+  ///
+  /// Channel names can contain only characters which are alphanumeric, _ or -`. Event name can be at most 200 characters long too.
+  ///
+  /// ## Triggering events
+  ///      Result response = await pusher.trigger(['test_channel'],'my_event',data);
   Future<Result> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
     options = options == null ? new TriggerOptions() : options;
     validateListOfChannelNames(channels);

@@ -10,7 +10,7 @@ class TriggerOptions {
     this._socketId = socketId;
   }
 
-  /// Returns the socket id
+  /// Socket id to be excluded from receiving event.
   get socketId => _socketId;
 }
 

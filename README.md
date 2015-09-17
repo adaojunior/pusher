@@ -87,9 +87,13 @@ Using presence channels is similar to private channels, but in order to identify
  User user = new User('1',{'name':'Adao'});
  String auth = pusher.authenticate('presence-test_channel',socketId,user);
 ```
-It is possible to query the state of your Pusher application using the generic `Pusher.Get( resource )` method and overloads.
+It is possible to query the state of your Pusher application using the generic `pusher.get( resource )` method and overloads.
 
 For full details see: <http://pusher.com/docs/rest_api>
+
+### Application state
+
+This library allows you to query our API to retrieve information about your application's channels, their individual properties, and, for presence-channels, the users currently subscribed to them.
 
 #### List channels
 
