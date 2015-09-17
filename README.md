@@ -122,6 +122,11 @@ Retrive a list of users that are on a presence channel:
 ```dart
 Result result = await pusher.get('/channels/presence-channel/users');
 ```
+
+## Documentation
+
+http://www.dartdocs.org/documentation/pusher/0.1.0/index.html
+
 ## License
 
 This code is free to use under the terms of the MIT license.
