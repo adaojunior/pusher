@@ -2,11 +2,10 @@ part of pusher;
 
 /// Options to be set on the trigger method.
 class TriggerOptions {
-
   /// Socket id to be excluded from receiving event.
   String _socketId = null;
 
-  TriggerOptions({String socketId}){
+  TriggerOptions({String socketId}) {
     this._socketId = socketId;
   }
 
@@ -16,7 +15,6 @@ class TriggerOptions {
 
 /// Represents the payload to be sent when triggering events
 class TriggerBody {
-
   /// The name of the event
   final String name;
 
@@ -29,29 +27,28 @@ class TriggerBody {
   /// The id of a socket to be excluded from receiving the event.
   final String socketId;
 
-  TriggerBody({this.name,this.data,this.channels,this.socketId}){
+  TriggerBody({this.name, this.data, this.channels, this.socketId}) {
     validateListOfChannelNames(this.channels);
     validateSocketId(this.socketId);
   }
 
   /// Gets a Map version of the body
-  Map<String,dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
-      'name':this.name,
-      'data':this.data,
-      'channels':this.channels,
-      'socketId':this.socketId
+      'name': this.name,
+      'data': this.data,
+      'channels': this.channels,
+      'socketId': this.socketId
     };
   }
 
   /// Gets the JSON enconded body.
-  toJson(){
+  toJson() {
     return JSON.encode(toMap());
   }
 
   /// Gets the MD5 encoded body
-  String toMD5(){
+  String toMD5() {
     return MD5Hash(toJson());
   }
 }
-
