@@ -38,6 +38,16 @@ Pusher pusher = new Pusher(
     'PUSHER_APP_SECRET'
 );
 ```
+### Additional options
+```dart
+PusherOptions options = new PusherOptions(encrypted: true);
+Pusher pusher = new Pusher(
+    'PUSHER_APP_ID',
+    'PUSHER_APP_KEY',
+    'PUSHER_APP_SECRET',
+    options
+);
+```
 
 ## Usage
 
@@ -75,3 +85,37 @@ Using presence channels is similar to private channels, but in order to identify
  User user = new User('1',{'name':'Adao'});
  String auth = pusher.authenticate('presence-test_channel',socketId,user);
 ```
+It is possible to query the state of your Pusher application using the generic `Pusher.Get( resource )` method and overloads.
+
+For full details see: <http://pusher.com/docs/rest_api>
+
+#### List channels
+
+You can get a list of channels that are present within your application:
+
+```dart
+Result result = await pusher.get("/channels");
+```
+You can provide additional parameters to filter the list of channels that is returned.
+
+```
+Result result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
+```
+
+#### Fetch channel information
+
+Retrive information about a single channel:
+
+```
+Result result = await pusher.get("/channels/my_channel");
+```
+#### Fetch a list of users on a presence channel
+
+Retrive a list of users that are on a presence channel:
+
+```
+Result result = await pusher.get('/channels/presence-channel/users');
+```
+## License
+
+This code is free to use under the terms of the MIT license.
