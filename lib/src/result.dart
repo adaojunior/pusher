@@ -8,9 +8,9 @@ class Result {
 
   Result(this._status,this._message);
 
-  get status => this._status;
+  int get status => this._status;
 
-  get message => this._message;
+  String get message => this._message;
 
   String toString() => this.message;
 }
