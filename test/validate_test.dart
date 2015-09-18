@@ -3,59 +3,54 @@
 
 library pusher.validate.test;
 
-import 'package:pusher/src/pusher.dart' show validateSocketId,validateChannelName,validateListOfChannelNames,CHANNEL_NAME_MAX_LENGTH;
+import 'package:pusher/src/pusher.dart'
+    show validateSocketId, validateChannelName, validateListOfChannelNames, CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
 
-String str_repeat(String piece, int multiplier){
+String str_repeat(String piece, int multiplier) {
   return new List<String>.filled(multiplier, 'a').join('');
 }
 
 void main() {
-
-
   group('validateSocketId()', () {
-
     test('SocketId cannot contain colon prefix', () {
-      expect(() => validateSocketId(':444.444'),throwsFormatException);
+      expect(() => validateSocketId(':444.444'), throwsFormatException);
     });
 
     test('SocketId cannot contain colon sufix', () {
-      expect(() => validateSocketId('444.444:'),throwsFormatException);
+      expect(() => validateSocketId('444.444:'), throwsFormatException);
     });
 
     test('socket_id_cannot_contain_letters_suffix', () {
-      expect(() => validateSocketId('444.444a'),throwsFormatException);
+      expect(() => validateSocketId('444.444a'), throwsFormatException);
     });
 
     test('socket_id_must_contain_a_period_point', () {
-      expect(() => validateSocketId('444'),throwsFormatException);
+      expect(() => validateSocketId('444'), throwsFormatException);
     });
 
     test('socket_id_must_not_contain_newline_prefix', () {
-      expect(() => validateSocketId('\n444.444'),throwsFormatException);
+      expect(() => validateSocketId('\n444.444'), throwsFormatException);
     });
 
     test('socket_id_must_not_contain_newline_suffix', () {
-      expect(() => validateSocketId('444.444\n'),throwsFormatException);
+      expect(() => validateSocketId('444.444\n'), throwsFormatException);
     });
 
     test('socket_id_must_not_be_empty_string', () {
-      expect(() => validateSocketId(''),throwsFormatException);
+      expect(() => validateSocketId(''), throwsFormatException);
     });
 
-    test('Should not throw a exception',(){
+    test('Should not throw a exception', () {
       expect(() => validateSocketId('444.444'), returnsNormally);
     });
 
-    test('It can be null',(){
+    test('It can be null', () {
       expect(() => validateSocketId(null), returnsNormally);
     });
-
   });
 
-  group('validateChannelName()', ()
-  {
-
+  group('validateChannelName()', () {
     test('channel_must_not_have_trailing_colon', () {
       expect(() => validateChannelName('private-channel:'), throwsFormatException);
     });
@@ -73,24 +68,24 @@ void main() {
     });
 
     test('channel_names_must_not_exceed_allowed_length', () {
-      expect(() => validateChannelName(str_repeat('.',CHANNEL_NAME_MAX_LENGTH + 1)), throwsArgumentError);
+      expect(() => validateChannelName(str_repeat('.', CHANNEL_NAME_MAX_LENGTH + 1)),
+          throwsArgumentError);
     });
 
-    test('Should not throw a exception',(){
+    test('Should not throw a exception', () {
       expect(() => validateChannelName('my-channel'), returnsNormally);
     });
   });
 
-
-  group('validateListOfChannelName()', ()
-  {
+  group('validateListOfChannelName()', () {
     test('Should not throw a exception', () {
-      expect(() => validateListOfChannelNames(['private-channel','private-message']), returnsNormally);
+      expect(() => validateListOfChannelNames(['private-channel', 'private-message']),
+          returnsNormally);
     });
 
     test('Should throw a FormatException', () {
-      expect(() => validateListOfChannelNames(['private-channel',':private-message']), throwsFormatException);
+      expect(() => validateListOfChannelNames(['private-channel', ':private-message']),
+          throwsFormatException);
     });
   });
-
 }

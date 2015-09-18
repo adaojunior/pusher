@@ -1,9 +1,8 @@
-
 library pusher;
 
-import 'package:crypto/crypto.dart' show HMAC,SHA256,MD5,CryptoUtils;
-import 'package:http/http.dart' show Request,StreamedResponse;
-import 'dart:convert' show JSON,UTF8;
+import 'package:crypto/crypto.dart' show HMAC, SHA256, MD5, CryptoUtils;
+import 'package:http/http.dart' show Request, StreamedResponse;
+import 'dart:convert' show JSON, UTF8;
 import 'dart:async' show Future;
 import 'dart:collection' show SplayTreeMap;
 
@@ -18,18 +17,17 @@ const int DEFAULT_HTTP_PORT = 80;
 
 /// Options to be set on the [Pusher] instance.
 class PusherOptions {
-
   /// Defines a value indicating whether call to the API are over HTTP or HTTPS.
   bool _encrypted;
 
   int _port = DEFAULT_HTTP_PORT;
 
-  PusherOptions({bool encrypted:false,int port}){
+  PusherOptions({bool encrypted: false, int port}) {
     this._encrypted = encrypted;
 
-    if(port != null) this._port = port;
+    if (port != null) this._port = port;
 
-    if(encrypted && port == null) this._port = DEFAULT_HTTPS_PORT;
+    if (encrypted && port == null) this._port = DEFAULT_HTTPS_PORT;
   }
 
   /// Indicates whether calls to the Pusher REST API are over HTTP or HTTPS.
@@ -41,22 +39,20 @@ class PusherOptions {
 
 /// Information about a user who is subscribing to a presence channel.
 class User {
-
   /// A unique user identifier for the user witin the application.
   /// Pusher uses this to uniquely identify a user. So, if multiple users are given the same [id]
   /// the second of these users will be ignored and won't be represented on the presence channel.
   final String id;
 
   /// Arbitrary additional information about the user.
-  final Map<String,String> info;
+  final Map<String, String> info;
 
-  User(this.id,this.info);
+  User(this.id, this.info);
 }
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
 class Pusher {
-
   String _id;
 
   String _key;
@@ -65,8 +61,7 @@ class Pusher {
 
   PusherOptions _options;
 
-  Pusher(String id, String key, String secret,[PusherOptions options]){
-
+  Pusher(String id, String key, String secret, [PusherOptions options]) {
     this._id = id;
     this._secret = secret;
     this._key = key;
@@ -104,22 +99,21 @@ class Pusher {
   // todo(): presence channels name's must start with `presence-`
   // https://pusher.com/docs/client_api_guide/client_presence_channels
   // todo(): better implementation of User to Json.
-  String authenticate(String channel,String socketId,[User user]){
+  String authenticate(String channel, String socketId, [User user]) {
     validateChannelName(channel);
     validateSocketId(socketId);
     String tosign;
     String token;
 
-    if(user == null) {
+    if (user == null) {
       tosign = "${socketId}:${channel}";
       token = "${this._key}:${HMAC256(_secret, tosign)}";
-      return JSON.encode({'auth':token});
-    }
-    else{
-      String data = JSON.encode({'user_id':user.id,'user_info':user.info});
+      return JSON.encode({'auth': token});
+    } else {
+      String data = JSON.encode({'user_id': user.id, 'user_info': user.info});
       tosign = "${socketId}:${channel}:${data}";
       token = "${this._key}:${HMAC256(_secret, tosign)}";
-      return JSON.encode({'auth':token,'channel_data':data});
+      return JSON.encode({'auth': token, 'channel_data': data});
     }
   }
 
@@ -137,15 +131,11 @@ class Pusher {
   /// ## Fetch a list of users on a presence channel
   /// Retrive a list of users that are on a presence channel:
   ///      Result result = await pusher.get('/channels/presence-channel/users');
-  Future<Result> get(String resource,[Map<String,String> parameters]) async{
-
-    parameters = (parameters != null) ? parameters : new Map<String,String>();
-    Request request =_createAuthenticatedRequest('GET', resource, parameters, null);
-    StreamedResponse response =  await request.send();
-    return new Result(
-        response.statusCode,
-        await response.stream.bytesToString()
-    );
+  Future<Result> get(String resource, [Map<String, String> parameters]) async {
+    parameters = (parameters != null) ? parameters : new Map<String, String>();
+    Request request = _createAuthenticatedRequest('GET', resource, parameters, null);
+    StreamedResponse response = await request.send();
+    return new Result(response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.
@@ -154,45 +144,46 @@ class Pusher {
   ///
   /// ## Triggering events
   ///      Result response = await pusher.trigger(['test_channel'],'my_event',data);
-  Future<Result> trigger(List<String> channels,String event, Map data,[TriggerOptions options]) {
+  Future<Result> trigger(List<String> channels, String event, Map data, [TriggerOptions options]) {
     options = options == null ? new TriggerOptions() : options;
     validateListOfChannelNames(channels);
     validateSocketId(options.socketId);
-    TriggerBody body = new TriggerBody(name:event,data:data.toString(),channels:channels,socketId:options.socketId);
-    return _executeTrigger(channels,event,body);
+    TriggerBody body = new TriggerBody(
+        name: event, data: data.toString(), channels: channels, socketId: options.socketId);
+    return _executeTrigger(channels, event, body);
   }
 
-  Future<Result> _executeTrigger(List<String> channels,String event,TriggerBody body) async {
-    Request request = _createAuthenticatedRequest('POST',"/events",null,body);
-    StreamedResponse response =  await request.send();
-    return new Result(response.statusCode,await response.stream.bytesToString());
+  Future<Result> _executeTrigger(List<String> channels, String event, TriggerBody body) async {
+    Request request = _createAuthenticatedRequest('POST', "/events", null, body);
+    StreamedResponse response = await request.send();
+    return new Result(response.statusCode, await response.stream.bytesToString());
   }
 
-  int _secondsSinceEpoch(){
+  int _secondsSinceEpoch() {
     return (new DateTime.now().toUtc().millisecondsSinceEpoch * 0.001).toInt();
   }
 
-  String _mapToQueryString(Map<String,String> params){
+  String _mapToQueryString(Map<String, String> params) {
     List values = [];
-    params.forEach((k,v){
+    params.forEach((k, v) {
       values.add("${k}=${v}");
     });
     return values.join('&');
   }
 
   /// todo(): refactor
-  Request _createAuthenticatedRequest(String method,String resource,Map<String,String> parameters,TriggerBody body){
-
+  Request _createAuthenticatedRequest(
+      String method, String resource, Map<String, String> parameters, TriggerBody body) {
     parameters = parameters == null ? new SplayTreeMap() : new SplayTreeMap.from(parameters);
     parameters['auth_key'] = this._key;
     parameters['auth_timestamp'] = _secondsSinceEpoch().toString();
     parameters['auth_version'] = '1.0';
 
-    if(body != null){
+    if (body != null) {
       parameters['body_md5'] = body.toMD5();
     }
 
-    if(resource.startsWith('/')){
+    if (resource.startsWith('/')) {
       resource = resource.substring(1);
     }
 
@@ -200,12 +191,13 @@ class Pusher {
     String path = "/apps/${this._id}/${resource}";
     String toSign = "${method}\n${path}\n${queryString}";
 
-    String authSignature = HMAC256(this._secret,toSign);
+    String authSignature = HMAC256(this._secret, toSign);
 
-    Uri uri = Uri.parse("${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}");
-    Request request = new Request(method,uri);
+    Uri uri =
+        Uri.parse("${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}");
+    Request request = new Request(method, uri);
     request.headers['Content-Type'] = 'application/json';
-    if(body != null) {
+    if (body != null) {
       request.body = body.toJson();
     }
     return request;
