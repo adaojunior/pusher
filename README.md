@@ -1,4 +1,4 @@
-# Pusher HTTP Dart Library
+# Pusher HTTP Dart Library [![Build Status](https://travis-ci.org/adaojunior/pusher.svg?branch=master)](https://travis-ci.org/adaojunior/pusher)
 
 The Dart library for interacting with the Pusher HTTP API.
 
