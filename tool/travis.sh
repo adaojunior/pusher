@@ -9,6 +9,7 @@ pub run test:test 	test/pusher_test.dart
 # Install dart_coveralls
 # Rerun tests with coverage and send to coveralls
 if [ "$COVERALLS_TOKEN" ]; then
+  echo "Running coverage..."
   pub global activate dart_coveralls
   pub global run dart_coveralls report \
     --token $COVERALLS_TOKEN \
