@@ -13,6 +13,7 @@ if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
   pub global activate dart_coveralls
   pub global run dart_coveralls report \
     --exclude-test-files \
+    --debug \
     --retry 2 \
     test/pusher_test.dart
 fi
