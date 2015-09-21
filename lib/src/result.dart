@@ -6,7 +6,7 @@ class Result {
   final int _status;
   final String _message;
 
-  Result(this._status, this._message);
+  Result(int status, String message) : _status = status, _message = message;
 
   /// HttpStatus.
   int get status => this._status;
