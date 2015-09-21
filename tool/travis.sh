@@ -8,15 +8,11 @@ pub run test:test 	test/pusher_test.dart
 # If the COVERALLS_TOKEN token is set on travis
 # Install dart_coveralls
 # Rerun tests with coverage and send to coveralls
-if [ "$COVERALLS_TOKEN" ]; then
-  echo "Running coverage..."
+# Install dart_coveralls; gather and send coverage data.
+if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
   pub global activate dart_coveralls
   pub global run dart_coveralls report \
-    --token $COVERALLS_TOKEN \
-    --retry 2 \
-    --debug \
-    --throw-on-error \
-    --print-json \
     --exclude-test-files \
+    --retry 2 \
     test/pusher_test.dart
 fi
