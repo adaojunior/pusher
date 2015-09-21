@@ -16,7 +16,7 @@ if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
   do
     # Workaround when failed coverage script still has exit code
     exec 5>&1
-    OUTPUT=$(pub run dart_coveralls report \
+    OUTPUT=$(pub global run dart_coveralls report \
       --retry 2 \
       --exclude-test-files \
       --debug \
