@@ -4,10 +4,11 @@
 library pusher.test;
 
 import 'package:pusher/pusher.dart';
-import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT;
+import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT,CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
 import 'dart:convert' show JSON;
 import 'dart:io' show Platform;
+import 'utils.dart' as utils;
 
 final PUSHER_APP_ID = Platform.environment['PUSHER_APP_ID'];
 final PUSHER_APP_KEY = Platform.environment['PUSHER_APP_KEY'];
@@ -125,10 +126,37 @@ void main() {
       expect(result.status, 200);
     });
 
-    test('Should trigger events', () async {
+    test('.trigger() Should trigger events', () async {
       Result respose =
           await pusher.trigger(['channel-test'], 'event-test', {'message': 'Hello World!'});
       expect(respose.status, 200);
+    });
+
+    group('.trigger() Should throw a exception if channel\'s name is invalid', () async {
+      var data = {'message': 'Hello World!'};
+      var event = 'event-test';
+
+      test('Channel must not have trailing colon', () {
+        expect(() =>  pusher.trigger(['private-channel:'],event,data), throwsFormatException);
+      });
+
+      test('Channel name must not have leading colon', () {
+        expect(() =>  pusher.trigger([':private-channel'],event,data), throwsFormatException);
+      });
+
+      test('Channel name must not have leading colon newline', () {
+        expect(() =>  pusher.trigger(['\nprivate-channel'],event,data), throwsFormatException);
+      });
+
+      test('Channel name must not have trailing colon newline', () {
+        expect(() =>  pusher.trigger(['private-channel\n'],event,data), throwsFormatException);
+      });
+
+      test('Channel names must not exceed allowed length', () {
+        var name = utils.str_repeat('a',CHANNEL_NAME_MAX_LENGTH + 1);
+        expect(() =>  pusher.trigger([name],event,data), throwsArgumentError);
+      });
+
     });
 
     test('Should authenticate socketId', () {

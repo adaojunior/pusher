@@ -49,43 +49,4 @@ void main() {
       expect(() => validateSocketId(null), returnsNormally);
     });
   });
-
-  group('validateChannelName()', () {
-    test('channel_must_not_have_trailing_colon', () {
-      expect(() => validateChannelName('private-channel:'), throwsFormatException);
-    });
-
-    test('channel_name_must_not_have_leading_colon', () {
-      expect(() => validateChannelName(':private-channel'), throwsFormatException);
-    });
-
-    test('channel_name_must_not_have_leading_colon_newline', () {
-      expect(() => validateChannelName(":\nprivate-channel"), throwsFormatException);
-    });
-
-    test('channel_name_must_not_have_trailing_colon_newline', () {
-      expect(() => validateChannelName('private-channel\n:'), throwsFormatException);
-    });
-
-    test('channel_names_must_not_exceed_allowed_length', () {
-      expect(() => validateChannelName(str_repeat('.', CHANNEL_NAME_MAX_LENGTH + 1)),
-          throwsArgumentError);
-    });
-
-    test('Should not throw a exception', () {
-      expect(() => validateChannelName('my-channel'), returnsNormally);
-    });
-  });
-
-  group('validateListOfChannelName()', () {
-    test('Should not throw a exception', () {
-      expect(() => validateListOfChannelNames(['private-channel', 'private-message']),
-          returnsNormally);
-    });
-
-    test('Should throw a FormatException', () {
-      expect(() => validateListOfChannelNames(['private-channel', ':private-message']),
-          throwsFormatException);
-    });
-  });
 }
