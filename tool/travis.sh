@@ -9,6 +9,7 @@ pub run test:test 	test/pusher_test.dart
 if [ "$COVERALLS_TOKEN" ] && [ "$TRAVIS_DART_VERSION" = "stable" ]; then
 
   echo "Running coverage..."
+  pub global activate dart_coveralls
 
   n=0
   until [ $n -ge 5 ]
