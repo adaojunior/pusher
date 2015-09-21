@@ -137,31 +137,20 @@ void main() {
       expect(respose.status, 200);
     });
 
-    group('.trigger() Should throw a exception if channel\'s name is invalid', () async {
-      var data = {'message': 'Hello World!'};
-      var event = 'event-test';
-
-      test('Channel must not have trailing colon', () {
-        expect(() =>  pusher.trigger(['private-channel:'],event,data), throwsFormatException);
+    test('.trigger() validates channels name format', () {
+      var list = utils.listOfInvalidChannelsName();
+      var event = 'my-event';
+      var data = {'message':'hello world'};
+      list.forEach((value) {
+        expect(() => pusher.trigger([value],event,data),throwsFormatException);
       });
+    });
 
-      test('Channel name must not have leading colon', () {
-        expect(() =>  pusher.trigger([':private-channel'],event,data), throwsFormatException);
-      });
-
-      test('Channel name must not have leading colon newline', () {
-        expect(() =>  pusher.trigger(['\nprivate-channel'],event,data), throwsFormatException);
-      });
-
-      test('Channel name must not have trailing colon newline', () {
-        expect(() =>  pusher.trigger(['private-channel\n'],event,data), throwsFormatException);
-      });
-
-      test('Channel names must not exceed allowed length', () {
-        var name = utils.str_repeat('a',CHANNEL_NAME_MAX_LENGTH + 1);
-        expect(() =>  pusher.trigger([name],event,data), throwsArgumentError);
-      });
-
+    test('trigger() validates channels name lenght', () {
+      var event = 'my-event';
+      var data = {'message':'hello world'};
+      var channel = utils.str_repeat('a',CHANNEL_NAME_MAX_LENGTH + 1);
+      expect(() =>  pusher.trigger([channel],event,data), throwsArgumentError);
     });
 
     test('.trigger() Should validate  socketId', () {

@@ -15,3 +15,12 @@ List listOfInvalidSocketId() {
     '', //socket_id_must_not_be_empty_string
   ];
 }
+
+List listOfInvalidChannelsName(){
+  return [
+    'private-channel:', //Channel must not have trailing colon,
+    ':private-channel', //Channel name must not have leading colon,
+    '\nprivate-channel', //Channel name must not have leading colon newline
+    'private-channel\n', //Channel name must not have trailing colon newline
+  ];
+}
