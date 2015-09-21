@@ -112,6 +112,11 @@ void main() {
     test('Should get `message`', () {
       expect(result.message, message);
     });
+
+    test('.toString()', () {
+      expect(result.toString(),message);
+    });
+
   });
 
   group('Pusher', () {
@@ -157,6 +162,17 @@ void main() {
         expect(() =>  pusher.trigger([name],event,data), throwsArgumentError);
       });
 
+    });
+
+    test('.trigger() Should validate  socketId', () {
+      var list = utils.listOfInvalidSocketId();
+      var event = 'my-event';
+      var channels = ['my-channel'];
+      var data = {'message':'hello world'};
+      list.forEach((value) {
+        var options = new TriggerOptions(socketId: value);
+        expect(() => pusher.trigger(channels,event,data,options),throwsFormatException);
+      });
     });
 
     test('Should authenticate socketId', () {
