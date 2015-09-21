@@ -4,10 +4,11 @@
 library pusher.test;
 
 import 'package:pusher/pusher.dart';
-import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT;
+import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT,CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
 import 'dart:convert' show JSON;
 import 'dart:io' show Platform;
+import 'utils.dart' as utils;
 
 final PUSHER_APP_ID = Platform.environment['PUSHER_APP_ID'];
 final PUSHER_APP_KEY = Platform.environment['PUSHER_APP_KEY'];
@@ -111,6 +112,11 @@ void main() {
     test('Should get `message`', () {
       expect(result.message, message);
     });
+
+    test('.toString()', () {
+      expect(result.toString(),message);
+    });
+
   });
 
   group('Pusher', () {
@@ -125,10 +131,37 @@ void main() {
       expect(result.status, 200);
     });
 
-    test('Should trigger events', () async {
+    test('.trigger() Should trigger events', () async {
       Result respose =
           await pusher.trigger(['channel-test'], 'event-test', {'message': 'Hello World!'});
       expect(respose.status, 200);
+    });
+
+    test('.trigger() validates channels name format', () {
+      var list = utils.listOfInvalidChannelsName();
+      var event = 'my-event';
+      var data = {'message':'hello world'};
+      list.forEach((value) {
+        expect(() => pusher.trigger([value],event,data),throwsFormatException);
+      });
+    });
+
+    test('trigger() validates channels name lenght', () {
+      var event = 'my-event';
+      var data = {'message':'hello world'};
+      var channel = utils.str_repeat('a',CHANNEL_NAME_MAX_LENGTH + 1);
+      expect(() =>  pusher.trigger([channel],event,data), throwsArgumentError);
+    });
+
+    test('.trigger() Should validate  socketId', () {
+      var list = utils.listOfInvalidSocketId();
+      var event = 'my-event';
+      var channels = ['my-channel'];
+      var data = {'message':'hello world'};
+      list.forEach((value) {
+        var options = new TriggerOptions(socketId: value);
+        expect(() => pusher.trigger(channels,event,data,options),throwsFormatException);
+      });
     });
 
     test('Should authenticate socketId', () {
