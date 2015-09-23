@@ -105,7 +105,7 @@ Result result = await pusher.get("/channels");
 You can provide additional parameters to filter the list of channels that is returned.
 
 ```dart
-Result result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
+Result result = await pusher.get("/channels", { "filter_by_prefix" : "presence-" } );
 ```
 
 #### Fetch channel information
