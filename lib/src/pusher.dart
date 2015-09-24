@@ -47,7 +47,16 @@ class User {
   /// Arbitrary additional information about the user.
   final Map<String, String> info;
 
-  User(this.id, this.info);
+  User(this.id, [this.info]);
+
+  Map toMap(){
+    Map map = new Map();
+    map['user_id'] = this.id;
+    if(this.info != null){
+      map['user_info'] = this.info;
+    }
+    return map;
+  }
 }
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
@@ -96,24 +105,21 @@ class Pusher {
   ///      String socketId = '74124.3251944';
   ///      User user = new User('1',{'name':'Adao'});
   ///      String auth = pusher.authenticate('presence-test_channel',socketId,user);
-  // todo(): presence channels name's must start with `presence-`
-  // https://pusher.com/docs/client_api_guide/client_presence_channels
-  // todo(): better implementation of User to Json.
   String authenticate(String channel, String socketId, [User user]) {
     validateChannelName(channel);
     validateSocketId(socketId);
-    String tosign;
+    String signature;
     String token;
 
     if (user == null) {
-      tosign = "${socketId}:${channel}";
-      token = "${this._key}:${HMAC256(_secret, tosign)}";
+      signature = "${socketId}:${channel}";
+      token = "${this._key}:${HMAC256(_secret, signature)}";
       return JSON.encode({'auth': token});
     } else {
-      String data = JSON.encode({'user_id': user.id, 'user_info': user.info});
-      tosign = "${socketId}:${channel}:${data}";
-      token = "${this._key}:${HMAC256(_secret, tosign)}";
-      return JSON.encode({'auth': token, 'channel_data': data});
+      String data = JSON.encode(user.toMap());
+      signature = "${socketId}:${channel}:${data}";
+      token = "${this._key}:${HMAC256(_secret, signature)}";
+      return JSON.encode({'auth': token, 'channel_data': user.toMap()});
     }
   }
 
