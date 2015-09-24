@@ -119,7 +119,7 @@ class Pusher {
       String data = JSON.encode(user.toMap());
       signature = "${socketId}:${channel}:${data}";
       token = "${this._key}:${HMAC256(_secret, signature)}";
-      return JSON.encode({'auth': token, 'channel_data': user.toMap()});
+      return JSON.encode({'auth': token, 'channel_data': data});
     }
   }
 

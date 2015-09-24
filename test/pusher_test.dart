@@ -185,10 +185,10 @@ void main() {
           instance.authenticate(channel, socketId , new User(userId,userInfo)),
           JSON.encode({
             "auth":"${key}:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
-            "channel_data":{
+            "channel_data":JSON.encode({
               "user_id":"1",
               "user_info":{"name":"Adao"}
-            }
+            })
           })
       );
 
@@ -196,9 +196,9 @@ void main() {
           instance.authenticate(channel, socketId , new User(userId)),
           JSON.encode({
             "auth":"${key}:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
-            "channel_data":{
+            "channel_data":JSON.encode({
               "user_id": "1"
-            }
+            })
           })
       );
 
