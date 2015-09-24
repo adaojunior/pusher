@@ -6,7 +6,7 @@ library pusher.test;
 import 'package:pusher/pusher.dart';
 import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT,CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
-import 'dart:convert' show JSON;
+import 'dart:convert' show JSON , JsonUnsupportedObjectError;
 import 'dart:io' show Platform;
 import 'utils.dart' as utils;
 
@@ -176,11 +176,51 @@ void main() {
     test('Should authenticate presence', () {
       String key = 'thisisaauthkey';
       Pusher instance = new Pusher('1', key, 'thisisasecret');
-      String auth = instance.authenticate(
-          'presence-test_channel', '74124.3251944', new User('1', {'name': 'Adao'}));
-      String expected =
-          '{"auth":"${key}:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2","channel_data":"{\\\"user_id\\\":\\\"1\\\",\\\"user_info\\\":{\\\"name\\\":\\\"Adao\\\"}}"}';
-      expect(auth, expected);
+      String channel = 'presence-test_channel';
+      String socketId = '74124.3251944';
+      String userId = "1";
+      Map userInfo = {'name': 'Adao'};
+
+      expect(
+          instance.authenticate(channel, socketId , new User(userId,userInfo)),
+          JSON.encode({
+            "auth":"${key}:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
+            "channel_data":JSON.encode({
+              "user_id":"1",
+              "user_info":{"name":"Adao"}
+            })
+          })
+      );
+
+      expect(
+          instance.authenticate(channel, socketId , new User(userId)),
+          JSON.encode({
+            "auth":"${key}:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
+            "channel_data":JSON.encode({
+              "user_id": "1"
+            })
+          })
+      );
+
+      expect(() =>
+        instance.authenticate(channel,socketId,new User(userId,{
+          "int":1,
+          "double":444.444,
+          "boolean":true
+        })),
+        returnsNormally
+      );
+
+      expect(() =>
+          instance.authenticate(channel,socketId,new User(userId,{
+            "int":1,
+            "double":444.444,
+            "boolean":true,
+            "aObjectInstance":instance
+          })),
+          throwsA(predicate((e) => e is JsonUnsupportedObjectError))
+      );
+
     });
   });
 }
