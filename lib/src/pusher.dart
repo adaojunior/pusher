@@ -45,7 +45,7 @@ class User {
   final String id;
 
   /// Arbitrary additional information about the user.
-  final Map<String, String> info;
+  final Map<String, dynamic> info;
 
   User(this.id, [this.info]);
 
@@ -105,6 +105,8 @@ class Pusher {
   ///      String socketId = '74124.3251944';
   ///      User user = new User('1',{'name':'Adao'});
   ///      String auth = pusher.authenticate('presence-test_channel',socketId,user);
+  ///
+  /// Throws a [JsonUnsupportedObjectError] if [User] cannot be serialized
   String authenticate(String channel, String socketId, [User user]) {
     validateChannelName(channel);
     validateSocketId(socketId);

@@ -6,7 +6,7 @@ library pusher.test;
 import 'package:pusher/pusher.dart';
 import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT,CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
-import 'dart:convert' show JSON;
+import 'dart:convert' show JSON , JsonUnsupportedObjectError;
 import 'dart:io' show Platform;
 import 'utils.dart' as utils;
 
@@ -200,6 +200,25 @@ void main() {
               "user_id": "1"
             })
           })
+      );
+
+      expect(() =>
+        instance.authenticate(channel,socketId,new User(userId,{
+          "int":1,
+          "double":444.444,
+          "boolean":true
+        })),
+        returnsNormally
+      );
+
+      expect(() =>
+          instance.authenticate(channel,socketId,new User(userId,{
+            "int":1,
+            "double":444.444,
+            "boolean":true,
+            "aObjectInstance":instance
+          })),
+          throwsA(predicate((e) => e is JsonUnsupportedObjectError))
       );
 
     });
