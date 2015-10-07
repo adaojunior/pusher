@@ -6,13 +6,6 @@ This package lets you trigger events to your client and query the state of your 
 
 In order to use this library, you need to have a free account on <http://pusher.com>. After registering, you will need the application credentials for your app.
 
-## Installation
-
-```dart
-dependencies:
-  pusher: "^0.1.0"
-```
-
 ## Getting Started
 
 ```dart
