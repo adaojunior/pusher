@@ -7,7 +7,7 @@ import 'dart:async' show Future;
 import 'dart:collection' show SplayTreeMap;
 
 part 'validation.dart';
-part 'result.dart';
+part 'response.dart';
 part 'trigger.dart';
 part 'utils.dart';
 
@@ -130,20 +130,20 @@ class Pusher {
   ///
   /// ## List channels
   /// You can get a list of channels that are present within your application:
-  ///      Result result = await pusher.get("/channels");
+  ///      Response result = await pusher.get("/channels");
   /// You can provide additional parameters to filter the list of channels that is returned.
-  ///      Result result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
+  ///      Response result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
   /// ## Fetch channel information
   /// Retrive information about a single channel:
-  ///      Result result = await pusher.get("/channels/my_channel");
+  ///      Response result = await pusher.get("/channels/my_channel");
   /// ## Fetch a list of users on a presence channel
   /// Retrive a list of users that are on a presence channel:
-  ///      Result result = await pusher.get('/channels/presence-channel/users');
-  Future<Result> get(String resource, [Map<String, String> parameters]) async {
+  ///      Response result = await pusher.get('/channels/presence-channel/users');
+  Future<Response> get(String resource, [Map<String, String> parameters]) async {
     parameters = (parameters != null) ? parameters : new Map<String, String>();
     Request request = _createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response = await request.send();
-    return new Result(response.statusCode, await response.stream.bytesToString());
+    return new Response(response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.
@@ -151,8 +151,8 @@ class Pusher {
   /// Channel names can contain only characters which are alphanumeric, _ or -`. Event name can be at most 200 characters long too.
   ///
   /// ## Triggering events
-  ///      Result response = await pusher.trigger(['test_channel'],'my_event',data);
-  Future<Result> trigger(List<String> channels, String event, Map data, [TriggerOptions options]) {
+  ///      Response response = await pusher.trigger(['test_channel'],'my_event',data);
+  Future<Response> trigger(List<String> channels, String event, Map data, [TriggerOptions options]) {
     options = options == null ? new TriggerOptions() : options;
     validateListOfChannelNames(channels);
     validateSocketId(options.socketId);
@@ -161,10 +161,10 @@ class Pusher {
     return _executeTrigger(channels, event, body);
   }
 
-  Future<Result> _executeTrigger(List<String> channels, String event, TriggerBody body) async {
+  Future<Response> _executeTrigger(List<String> channels, String event, TriggerBody body) async {
     Request request = _createAuthenticatedRequest('POST', "/events", null, body);
     StreamedResponse response = await request.send();
-    return new Result(response.statusCode, await response.stream.bytesToString());
+    return new Response(response.statusCode, await response.stream.bytesToString());
   }
 
   int _secondsSinceEpoch() {

@@ -1,12 +1,11 @@
 part of pusher;
 
-/// Result of a resource request
-// todo(): call it Response
-class Result {
+/// Response of a resource request
+class Response {
   final int _status;
   final String _message;
 
-  Result(int status, String message) : _status = status, _message = message;
+  Response(int status, String message) : _status = status, _message = message;
 
   /// HttpStatus.
   int get status => this._status;
