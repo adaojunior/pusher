@@ -179,7 +179,6 @@ class Pusher {
     return values.join('&');
   }
 
-  /// todo(): refactor
   Request _createAuthenticatedRequest(
       String method, String resource, Map<String, String> parameters, TriggerBody body) {
     parameters = parameters == null ? new SplayTreeMap() : new SplayTreeMap.from(parameters);
