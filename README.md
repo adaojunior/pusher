@@ -1,4 +1,4 @@
-# Pusher HTTP Dart Library [![Build Status](https://travis-ci.org/adaojunior/pusher.svg?branch=master)](https://travis-ci.org/adaojunior/pusher) [![Coverage Status](https://coveralls.io/repos/adaojunior/pusher/badge.svg?branch=master&service=github)](https://coveralls.io/github/adaojunior/pusher?branch=master)
+# Pusher HTTP Dart Library [![Build Status](https://travis-ci.org/adaojunior/pusher.svg?branch=master)](https://travis-ci.org/adaojunior/pusher) [![Coverage Status](https://coveralls.io/repos/adaojunior/pusher/badge.svg?branch=master&service=github)](https://coveralls.io/github/adaojunior/pusher?branch=master) [![Pub Status](https://img.shields.io/pub/v/pusher.svg)](https://pub.dartlang.org/packages/pusher)
 
 The Dart library for interacting with the Pusher HTTP API.
 
@@ -116,7 +116,7 @@ Response result = await pusher.get('/channels/presence-channel/users');
 
 ## Documentation
 
-http://www.dartdocs.org/documentation/pusher/0.1.0/index.html
+http://www.dartdocs.org/documentation/pusher/latest/index.html
 
 ## License
 
