@@ -1,4 +1,6 @@
-part of pusher;
+import 'dart:convert';
+import 'utils.dart';
+import 'validation.dart';
 
 /// Options to be set on the trigger method.
 class TriggerOptions {

@@ -1,5 +1,3 @@
-part of pusher;
-
 /// Response of a resource request
 class Response {
   final int _status;

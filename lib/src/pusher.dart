@@ -1,15 +1,11 @@
-library pusher;
-
-import 'package:crypto/crypto.dart' show HMAC, SHA256, MD5, CryptoUtils;
 import 'package:http/http.dart' show Request, StreamedResponse;
-import 'dart:convert' show JSON, UTF8;
-import 'dart:async' show Future;
-import 'dart:collection' show SplayTreeMap;
-
-part 'validation.dart';
-part 'response.dart';
-part 'trigger.dart';
-part 'utils.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:collection';
+import 'validation.dart';
+import 'response.dart';
+import 'trigger.dart';
+import 'utils.dart';
 
 const String DEFAULT_HOST = "api.pusherapp.com";
 const int DEFAULT_HTTPS_PORT = 443;

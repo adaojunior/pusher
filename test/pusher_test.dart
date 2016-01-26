@@ -1,10 +1,10 @@
 // Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-library pusher.test;
-
 import 'package:pusher/pusher.dart';
-import 'package:pusher/src/pusher.dart' show TriggerBody, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT,CHANNEL_NAME_MAX_LENGTH;
+import 'package:pusher/src/pusher.dart' show DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT;
+import 'package:pusher/src/trigger.dart';
+import 'package:pusher/src/validation.dart' show CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
 import 'dart:convert' show JSON , JsonUnsupportedObjectError;
 import 'dart:io' show Platform;
