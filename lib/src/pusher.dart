@@ -27,10 +27,10 @@ class Pusher {
     this._options = options == null ? new PusherOptions() : options;
   }
 
-  _getBaseUrl() {
+  String _getBaseUrl() {
     String schema = _options.encrypted ? 'https' : 'http';
     String port = _options.port == 80 ? '' : ":${_options.port}";
-    return "${schema}://${DEFAULT_HOST}${port}";
+    return "$schema://$DEFAULT_HOST$port";
   }
 
   /// Authenticates the subscription request for a presence channel.
@@ -64,13 +64,13 @@ class Pusher {
     String token;
 
     if (user == null) {
-      signature = "${socketId}:${channel}";
-      token = "${this._key}:${HMAC256(_secret, signature)}";
+      signature = "$socketId:$channel";
+      token = "$_key:${HMAC256(_secret, signature)}";
       return JSON.encode({'auth': token});
     } else {
       String data = JSON.encode(user.toMap());
-      signature = "${socketId}:${channel}:${data}";
-      token = "${this._key}:${HMAC256(_secret, signature)}";
+      signature = "$socketId:$channel:$data";
+      token = "$_key:${HMAC256(_secret, signature)}";
       return JSON.encode({'auth': token, 'channel_data': data});
     }
   }
@@ -134,7 +134,7 @@ class Pusher {
   String _mapToQueryString(Map<String, String> params) {
     List values = [];
     params.forEach((k, v) {
-      values.add("${k}=${v}");
+      values.add("$k=$v");
     });
     return values.join('&');
   }
@@ -157,13 +157,13 @@ class Pusher {
     }
 
     String queryString = _mapToQueryString(parameters);
-    String path = "/apps/${this._id}/${resource}";
-    String toSign = "${method}\n${path}\n${queryString}";
+    String path = "/apps/${this._id}/$resource";
+    String toSign = "$method\n$path\n$queryString";
 
     String authSignature = HMAC256(this._secret, toSign);
 
     Uri uri = Uri.parse(
-        "${this._getBaseUrl()}${path}?${queryString}&auth_signature=${authSignature}");
+        "${this._getBaseUrl()}$path?$queryString&auth_signature=$authSignature");
     Request request = new Request(method, uri);
     request.headers['Content-Type'] = 'application/json';
     if (body != null) {

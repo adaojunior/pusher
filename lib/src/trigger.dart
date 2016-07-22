@@ -5,14 +5,14 @@ import 'validation.dart';
 /// Options to be set on the trigger method.
 class TriggerOptions {
   /// Socket id to be excluded from receiving event.
-  String _socketId = null;
+  String _socketId;
 
   TriggerOptions({String socketId}) {
     this._socketId = socketId;
   }
 
   /// Socket id to be excluded from receiving event.
-  get socketId => _socketId;
+  String get socketId => _socketId;
 }
 
 /// Represents the payload to be sent when triggering events
@@ -45,7 +45,7 @@ class TriggerBody {
   }
 
   /// Gets the JSON enconded body.
-  toJson() {
+  String toJson() {
     return JSON.encode(toMap());
   }
 

@@ -168,7 +168,7 @@ void main() {
       Pusher instance = new Pusher('1', key, 'thisisasecret');
       String auth = instance.authenticate('test_channel', '74124.3251944');
       String expected =
-          '{"auth":"${key}:f8390ffe4df18cc755d3191b9db75182c71354e0b3ad7be1d186ac86f3c0fc4b"}';
+          '{"auth":"$key:f8390ffe4df18cc755d3191b9db75182c71354e0b3ad7be1d186ac86f3c0fc4b"}';
       expect(auth, expected);
     });
 
@@ -178,12 +178,12 @@ void main() {
       String channel = 'presence-test_channel';
       String socketId = '74124.3251944';
       String userId = "1";
-      Map userInfo = {'name': 'Adao'};
+      Map<String, String> userInfo = {'name': 'Adao'};
 
       expect(
           instance.authenticate(channel, socketId , new User(userId,userInfo)),
           JSON.encode({
-            "auth":"${key}:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
+            "auth":"$key:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
             "channel_data":JSON.encode({
               "user_id":"1",
               "user_info":{"name":"Adao"}
@@ -194,7 +194,7 @@ void main() {
       expect(
           instance.authenticate(channel, socketId , new User(userId)),
           JSON.encode({
-            "auth":"${key}:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
+            "auth":"$key:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
             "channel_data":JSON.encode({
               "user_id": "1"
             })

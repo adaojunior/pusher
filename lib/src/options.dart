@@ -18,8 +18,8 @@ class PusherOptions {
   }
 
   /// Indicates whether calls to the Pusher REST API are over HTTP or HTTPS.
-  get encrypted => _encrypted;
+  bool get encrypted => _encrypted;
 
   /// port that the HTTP calls will be made to.
-  get port => _port;
+  int get port => _port;
 }
