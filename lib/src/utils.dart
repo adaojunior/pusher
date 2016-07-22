@@ -4,15 +4,8 @@ import 'dart:convert';
 String HMAC256(String secret, String toSign) {
   List<int> secretBytes = UTF8.encode(secret);
   List<int> messageBytes = UTF8.encode(toSign);
-  var hmac = new HMAC(new SHA256(), secretBytes);
-  hmac.add(messageBytes);
-  var digest = hmac.close();
-  return CryptoUtils.bytesToHex(digest);
+  final hmac = new Hmac(sha256, secretBytes);
+  return hmac.convert(messageBytes).toString();
 }
 
-String MD5Hash(String data) {
-  var md5 = new MD5();
-  md5.add(UTF8.encode(data));
-  var digest = md5.close();
-  return CryptoUtils.bytesToHex(digest);
-}
+String MD5Hash(String data) => md5.convert(UTF8.encode(data)).toString();
