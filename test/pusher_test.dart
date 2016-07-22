@@ -2,8 +2,7 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'package:pusher/pusher.dart';
-import 'package:pusher/src/pusher.dart' show DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT;
-import 'package:pusher/src/trigger.dart';
+import 'package:pusher/src/options.dart' show DEFAULT_HTTPS_PORT, DEFAULT_HTTP_PORT;
 import 'package:pusher/src/validation.dart' show CHANNEL_NAME_MAX_LENGTH;
 import 'package:test/test.dart';
 import 'dart:convert' show JSON , JsonUnsupportedObjectError;
