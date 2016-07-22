@@ -141,6 +141,7 @@ class Pusher {
 
   Request _createAuthenticatedRequest(String method, String resource,
       Map<String, String> parameters, TriggerBody body) {
+    resource = resource.startsWith('/') ? resource.substring(1) : resource;
     parameters = parameters == null
         ? new SplayTreeMap()
         : new SplayTreeMap.from(parameters);
@@ -150,10 +151,6 @@ class Pusher {
 
     if (body != null) {
       parameters['body_md5'] = body.toMD5();
-    }
-
-    if (resource.startsWith('/')) {
-      resource = resource.substring(1);
     }
 
     String queryString = _mapToQueryString(parameters);
