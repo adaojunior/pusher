@@ -118,6 +118,20 @@ void main() {
 
   });
 
+  group('Exceptions', () {
+    test('Response Exception', () {
+      String message = "auth_key should be a valid app key";
+      int status = 400;
+      Response response = new Response(400, message);
+      ResponseException exception = new ResponseException(response);
+
+      expect(exception, new isInstanceOf<PusherException>());
+      expect(exception.response.message, message);
+      expect(exception.response.status, status);
+      expect(exception.code, status);
+    });
+  });
+
   group('Pusher', () {
     Pusher pusher;
 
