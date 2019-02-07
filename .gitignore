@@ -10,6 +10,8 @@ doc/api
 *.js_
 *.js.deps
 *.js.map
+.dart_tool/
+.packages
 
 # Include when developing application packages.
 pubspec.lock

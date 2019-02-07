@@ -1,5 +1,5 @@
 
-String str_repeat(String piece, int multiplier) {
+String strRepeat(String piece, int multiplier) {
   return new List<String>.filled(multiplier, 'a').join('');
 }
 
