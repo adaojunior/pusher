@@ -46,11 +46,11 @@ class TriggerBody {
 
   /// Gets the JSON enconded body.
   String toJson() {
-    return JSON.encode(toMap());
+    return json.encode(toMap());
   }
 
   /// Gets the MD5 encoded body
   String toMD5() {
-    return MD5Hash(toJson());
+    return md5Hash(toJson());
   }
 }

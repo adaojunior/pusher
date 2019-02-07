@@ -30,7 +30,7 @@ class Pusher {
   String _getBaseUrl() {
     String schema = _options.encrypted ? 'https' : 'http';
     String port = _options.port == 80 ? '' : ":${_options.port}";
-    return "$schema://$DEFAULT_HOST$port";
+    return "$schema://$defaultHost$port";
   }
 
   /// Authenticates the subscription request for a presence channel.
@@ -65,13 +65,13 @@ class Pusher {
 
     if (user == null) {
       signature = "$socketId:$channel";
-      token = "$_key:${HMAC256(_secret, signature)}";
-      return JSON.encode({'auth': token});
+      token = "$_key:${hmac256(_secret, signature)}";
+      return json.encode({'auth': token});
     } else {
-      String data = JSON.encode(user.toMap());
+      String data = json.encode(user.toMap());
       signature = "$socketId:$channel:$data";
-      token = "$_key:${HMAC256(_secret, signature)}";
-      return JSON.encode({'auth': token, 'channel_data': data});
+      token = "$_key:${hmac256(_secret, signature)}";
+      return json.encode({'auth': token, 'channel_data': data});
     }
   }
 
@@ -157,7 +157,7 @@ class Pusher {
     String path = "/apps/${this._id}/$resource";
     String toSign = "$method\n$path\n$queryString";
 
-    String authSignature = HMAC256(this._secret, toSign);
+    String authSignature = hmac256(this._secret, toSign);
 
     Uri uri = Uri.parse(
         "${this._getBaseUrl()}$path?$queryString&auth_signature=$authSignature");

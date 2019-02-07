@@ -2,28 +2,28 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'package:pusher/pusher.dart';
-import 'package:pusher/src/options.dart' show DEFAULT_HTTPS_PORT, DEFAULT_HTTP_PORT;
-import 'package:pusher/src/validation.dart' show CHANNEL_NAME_MAX_LENGTH;
+import 'package:pusher/src/options.dart' show defaultHttpsPort, defaultHttpPort;
+import 'package:pusher/src/validation.dart' show channelNameMaxLength;
 import 'package:test/test.dart';
-import 'dart:convert' show JSON , JsonUnsupportedObjectError;
+import 'dart:convert' show json , JsonUnsupportedObjectError;
 import 'dart:io' show Platform;
 import 'utils.dart' as utils;
 
-final PUSHER_APP_ID = Platform.environment['PUSHER_APP_ID'];
-final PUSHER_APP_KEY = Platform.environment['PUSHER_APP_KEY'];
-final PUSHER_APP_SECRET = Platform.environment['PUSHER_APP_SECRET'];
+final String pusherAppId = Platform.environment['PUSHER_APP_ID'];
+final String pusherAppKey = Platform.environment['PUSHER_APP_KEY'];
+final String pusherAppSecret = Platform.environment['PUSHER_APP_SECRET'];
 
 void main() {
   group('PusherOptions', () {
     test('Test default values', () {
       PusherOptions options = new PusherOptions();
       expect(options.encrypted, false);
-      expect(options.port, DEFAULT_HTTP_PORT);
+      expect(options.port, defaultHttpPort);
     });
 
     test('Should use HTTPS if encrypted is `true` and port if `null`', () {
       PusherOptions options = new PusherOptions(encrypted: true);
-      expect(options.port, DEFAULT_HTTPS_PORT);
+      expect(options.port, defaultHttpsPort);
     });
 
     test('Constructor #1', () {
@@ -85,7 +85,7 @@ void main() {
 
     test('Should get a JSON encoded body', () {
       expect(body.toJson(),
-          JSON.encode({'name': name, 'data': data, 'channels': channels, 'socketId': socketId}));
+          json.encode({'name': name, 'data': data, 'channels': channels, 'socketId': socketId}));
     });
 
     test('Should get a MD5 encoded body', () {
@@ -122,7 +122,7 @@ void main() {
     Pusher pusher;
 
     setUp(() {
-      pusher = new Pusher(PUSHER_APP_ID, PUSHER_APP_KEY, PUSHER_APP_SECRET);
+      pusher = new Pusher(pusherAppId, pusherAppKey, pusherAppSecret);
     });
 
     test('Should get `/channels`', () async {
@@ -148,7 +148,7 @@ void main() {
     test('trigger() validates channels name lenght', () {
       var event = 'my-event';
       var data = {'message':'hello world'};
-      var channel = utils.str_repeat('a',CHANNEL_NAME_MAX_LENGTH + 1);
+      var channel = utils.strRepeat('a',channelNameMaxLength + 1);
       expect(() =>  pusher.trigger([channel],event,data), throwsArgumentError);
     });
 
@@ -182,9 +182,9 @@ void main() {
 
       expect(
           instance.authenticate(channel, socketId , new User(userId,userInfo)),
-          JSON.encode({
+          json.encode({
             "auth":"$key:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
-            "channel_data":JSON.encode({
+            "channel_data":json.encode({
               "user_id":"1",
               "user_info":{"name":"Adao"}
             })
@@ -193,9 +193,9 @@ void main() {
 
       expect(
           instance.authenticate(channel, socketId , new User(userId)),
-          JSON.encode({
+          json.encode({
             "auth":"$key:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
-            "channel_data":JSON.encode({
+            "channel_data":json.encode({
               "user_id": "1"
             })
           })
