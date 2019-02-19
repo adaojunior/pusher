@@ -27,12 +27,6 @@ class Pusher {
     this._options = options == null ? new PusherOptions() : options;
   }
 
-  String _getBaseUrl() {
-    String schema = _options.encrypted ? 'https' : 'http';
-    String port = _options.port == 80 ? '' : ":${_options.port}";
-    return "$schema://$defaultHost$port";
-  }
-
   /// Authenticates the subscription request for a presence channel.
   ///
   /// Pusher provides a mechanism for authenticating a user's access to a channel at the point of subscription.
@@ -160,7 +154,7 @@ class Pusher {
     String authSignature = hmac256(this._secret, toSign);
 
     Uri uri = Uri.parse(
-        "${this._getBaseUrl()}$path?$queryString&auth_signature=$authSignature");
+        "${_options.getBaseUrl()}$path?$queryString&auth_signature=$authSignature");
     Request request = new Request(method, uri);
     request.headers['Content-Type'] = 'application/json';
     if (body != null) {
