@@ -9,10 +9,14 @@ class PusherOptions {
 
   int _port = defaultHttpPort;
 
-  PusherOptions({bool encrypted: false, int port}) {
+  String _cluster;
+
+  PusherOptions({bool encrypted: false, int port, String cluster}) {
     this._encrypted = encrypted;
 
     if (port != null) this._port = port;
+
+    if (cluster != null) this._cluster = cluster;
 
     if (encrypted && port == null) this._port = defaultHttpsPort;
   }
@@ -22,4 +26,16 @@ class PusherOptions {
 
   /// port that the HTTP calls will be made to.
   int get port => _port;
+
+  String get cluster => _cluster;
+
+  bool get hasCluster => _cluster != null;
+
+  String get host => !hasCluster ? defaultHost : "api-${_cluster}.pusher.com";
+
+  String getBaseUrl() {
+    String schema = encrypted ? 'https' : 'http';
+    String port = _port == 80 ? '' : ":${_port}";
+    return "$schema://$host$port";
+  }
 }

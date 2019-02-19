@@ -31,6 +31,16 @@ void main() {
       expect(options.encrypted, true);
       expect(options.port, 1000);
     });
+
+    test('PusherOptions with cluster', () {
+      PusherOptions options = new PusherOptions(cluster: 'ap1');
+      expect(options.host, "api-ap1.pusher.com");
+    });
+
+    test('PusherOptions without cluster', () {
+      PusherOptions options = new PusherOptions();
+      expect(options.host, 'api.pusherapp.com');
+    });
   });
 
   group('TriggerOptions', () {
