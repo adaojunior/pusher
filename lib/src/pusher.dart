@@ -8,6 +8,7 @@ import 'trigger.dart';
 import 'utils.dart';
 import 'user.dart';
 import 'options.dart';
+import 'exceptions.dart';
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
@@ -116,9 +117,18 @@ class Pusher {
       List<String> channels, String event, TriggerBody body) async {
     Request request =
         _createAuthenticatedRequest('POST', "/events", null, body);
-    StreamedResponse response = await request.send();
-    return new Response(
-        response.statusCode, await response.stream.bytesToString());
+    StreamedResponse streamedResponse = await request.send();
+
+    int status = streamedResponse.statusCode;
+
+    Response response = new Response(
+        streamedResponse.statusCode,
+        await streamedResponse.stream.bytesToString()
+    );
+
+    if(status >= 400) throw new ResponseException(response);
+
+    return response;
   }
 
   int _secondsSinceEpoch() {
