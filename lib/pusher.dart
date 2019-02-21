@@ -4,3 +4,4 @@ export 'src/options.dart' show PusherOptions;
 export 'src/response.dart';
 export 'src/trigger.dart';
 export 'src/user.dart';
+export 'src/webhook.dart' show Webhook;

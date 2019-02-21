@@ -8,6 +8,7 @@ import 'trigger.dart';
 import 'utils.dart';
 import 'user.dart';
 import 'options.dart';
+import 'webhook.dart' show Webhook;
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
@@ -111,6 +112,10 @@ class Pusher {
         socketId: options.socketId);
     return _executeTrigger(channels, event, body);
   }
+
+  /// Creates a new [Webhook] using the application secret
+  Webhook webhook(String signature, String body) =>
+      new Webhook(_secret, signature, body);
 
   Future<Response> _executeTrigger(
       List<String> channels, String event, TriggerBody body) async {
