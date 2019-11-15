@@ -6,7 +6,7 @@ import 'validation.dart';
 import 'response.dart';
 import 'trigger.dart';
 import 'utils.dart';
-import 'user.dart';
+import 'presence_channel_data.dart';
 import 'options.dart';
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
@@ -47,22 +47,22 @@ class Pusher {
   /// Using presence channels is similar to private channels, but in order to identify a user,
   /// clients are sent a user_id and, optionally, custom data.
   ///      String socketId = '74124.3251944';
-  ///      User user = User('1',{'name':'Adao'});
-  ///      String auth = pusher.authenticate('presence-test_channel',socketId,user);
+  ///      PresenceChannelData channelData = PresenceChannelData('1',{'name':'Adao'});
+  ///      String auth = pusher.authenticate('presence-test_channel', socketId, channelData);
   ///
-  /// Throws a [JsonUnsupportedObjectError] if [User] cannot be serialized
-  String authenticate(String channel, String socketId, [User user]) {
+  /// Throws a [JsonUnsupportedObjectError] if [PresenceChannelData] cannot be serialized
+  String authenticate(String channel, String socketId, [PresenceChannelData channelData]) {
     validateChannelName(channel);
     validateSocketId(socketId);
     String signature;
     String token;
 
-    if (user == null) {
+    if (channelData == null) {
       signature = "$socketId:$channel";
       token = "$_key:${hmac256(_secret, signature)}";
       return json.encode({'auth': token});
     } else {
-      String data = json.encode(user.toMap());
+      String data = json.encode(channelData.toMap());
       signature = "$socketId:$channel:$data";
       token = "$_key:${hmac256(_secret, signature)}";
       return json.encode({'auth': token, 'channel_data': data});

@@ -191,7 +191,7 @@ void main() {
       Map<String, String> userInfo = {'name': 'Adao'};
 
       expect(
-          instance.authenticate(channel, socketId , User(userId,userInfo)),
+          instance.authenticate(channel, socketId , PresenceChannelData(userId,userInfo)),
           json.encode({
             "auth":"$key:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
             "channel_data":json.encode({
@@ -202,7 +202,7 @@ void main() {
       );
 
       expect(
-          instance.authenticate(channel, socketId , User(userId)),
+          instance.authenticate(channel, socketId , PresenceChannelData(userId)),
           json.encode({
             "auth":"$key:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
             "channel_data":json.encode({
@@ -212,7 +212,7 @@ void main() {
       );
 
       expect(() =>
-        instance.authenticate(channel,socketId,User(userId,{
+        instance.authenticate(channel,socketId,PresenceChannelData(userId,{
           "int":1,
           "double":444.444,
           "boolean":true
@@ -221,7 +221,7 @@ void main() {
       );
 
       expect(() =>
-          instance.authenticate(channel,socketId,User(userId,{
+          instance.authenticate(channel,socketId,PresenceChannelData(userId,{
             "int":1,
             "double":444.444,
             "boolean":true,
