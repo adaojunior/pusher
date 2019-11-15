@@ -1,6 +1,6 @@
 /// Information about a user who is subscribing to a presence channel.
 class User {
-  /// A unique user identifier for the user witin the application.
+  /// A unique user identifier for the user within the application.
   /// Pusher uses this to uniquely identify a user. So, if multiple users are given the same [id]
   /// the second of these users will be ignored and won't be represented on the presence channel.
   final String id;
