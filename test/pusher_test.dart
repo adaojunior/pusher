@@ -16,29 +16,29 @@ final String pusherAppSecret = Platform.environment['PUSHER_APP_SECRET'];
 void main() {
   group('PusherOptions', () {
     test('Test default values', () {
-      PusherOptions options = new PusherOptions();
+      PusherOptions options = PusherOptions();
       expect(options.encrypted, false);
       expect(options.port, defaultHttpPort);
     });
 
     test('Should use HTTPS if encrypted is `true` and port if `null`', () {
-      PusherOptions options = new PusherOptions(encrypted: true);
+      PusherOptions options = PusherOptions(encrypted: true);
       expect(options.port, defaultHttpsPort);
     });
 
     test('Constructor #1', () {
-      PusherOptions options = new PusherOptions(encrypted: true, port: 1000);
+      PusherOptions options = PusherOptions(encrypted: true, port: 1000);
       expect(options.encrypted, true);
       expect(options.port, 1000);
     });
 
     test('PusherOptions with cluster', () {
-      PusherOptions options = new PusherOptions(cluster: 'ap1');
+      PusherOptions options = PusherOptions(cluster: 'ap1');
       expect(options.host, "api-ap1.pusher.com");
     });
 
     test('PusherOptions without cluster', () {
-      PusherOptions options = new PusherOptions();
+      PusherOptions options = PusherOptions();
       expect(options.host, 'api.pusherapp.com');
     });
   });
@@ -49,7 +49,7 @@ void main() {
 
     setUp(() {
       socketId = '444.444';
-      options = new TriggerOptions(socketId: socketId);
+      options = TriggerOptions(socketId: socketId);
     });
 
     test('Should get `socketId`', () {
@@ -69,7 +69,7 @@ void main() {
       data = 'Hello World';
       channels = ['my-channel'];
       socketId = '444.444';
-      body = new TriggerBody(name: name, data: data, channels: channels, socketId: socketId);
+      body = TriggerBody(name: name, data: data, channels: channels, socketId: socketId);
     });
 
     test('Should get `name`', () {
@@ -111,7 +111,7 @@ void main() {
     setUp(() {
       status = 200;
       message = '{}';
-      result = new Response(status, message);
+      result = Response(status, message);
     });
 
     test('Should get `status`', () {
@@ -132,7 +132,7 @@ void main() {
     Pusher pusher;
 
     setUp(() {
-      pusher = new Pusher(pusherAppId, pusherAppKey, pusherAppSecret);
+      pusher = Pusher(pusherAppId, pusherAppKey, pusherAppSecret);
     });
 
     test('Should get `/channels`', () async {
@@ -168,14 +168,14 @@ void main() {
       var channels = ['my-channel'];
       var data = {'message':'hello world'};
       list.forEach((value) {
-        var options = new TriggerOptions(socketId: value);
+        var options = TriggerOptions(socketId: value);
         expect(() => pusher.trigger(channels,event,data,options),throwsFormatException);
       });
     });
 
     test('Should authenticate socketId', () {
       String key = 'thisisaauthkey';
-      Pusher instance = new Pusher('1', key, 'thisisasecret');
+      Pusher instance = Pusher('1', key, 'thisisasecret');
       String auth = instance.authenticate('test_channel', '74124.3251944');
       String expected =
           '{"auth":"$key:f8390ffe4df18cc755d3191b9db75182c71354e0b3ad7be1d186ac86f3c0fc4b"}';
@@ -184,14 +184,14 @@ void main() {
 
     test('Should authenticate presence', () {
       String key = 'thisisaauthkey';
-      Pusher instance = new Pusher('1', key, 'thisisasecret');
+      Pusher instance = Pusher('1', key, 'thisisasecret');
       String channel = 'presence-test_channel';
       String socketId = '74124.3251944';
       String userId = "1";
       Map<String, String> userInfo = {'name': 'Adao'};
 
       expect(
-          instance.authenticate(channel, socketId , new User(userId,userInfo)),
+          instance.authenticate(channel, socketId , User(userId,userInfo)),
           json.encode({
             "auth":"$key:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
             "channel_data":json.encode({
@@ -202,7 +202,7 @@ void main() {
       );
 
       expect(
-          instance.authenticate(channel, socketId , new User(userId)),
+          instance.authenticate(channel, socketId , User(userId)),
           json.encode({
             "auth":"$key:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",
             "channel_data":json.encode({
@@ -212,7 +212,7 @@ void main() {
       );
 
       expect(() =>
-        instance.authenticate(channel,socketId,new User(userId,{
+        instance.authenticate(channel,socketId,User(userId,{
           "int":1,
           "double":444.444,
           "boolean":true
@@ -221,7 +221,7 @@ void main() {
       );
 
       expect(() =>
-          instance.authenticate(channel,socketId,new User(userId,{
+          instance.authenticate(channel,socketId,User(userId,{
             "int":1,
             "double":444.444,
             "boolean":true,

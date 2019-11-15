@@ -1,6 +1,6 @@
 
 String strRepeat(String piece, int multiplier) {
-  return new List<String>.filled(multiplier, 'a').join('');
+  return List<String>.filled(multiplier, 'a').join('');
 }
 
 List listOfInvalidSocketId() {

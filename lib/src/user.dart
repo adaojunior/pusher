@@ -11,7 +11,7 @@ class User {
   User(this.id, [this.info]);
 
   Map toMap() {
-    Map map = new Map();
+    Map map = Map();
     map['user_id'] = this.id;
     if (this.info != null) {
       map['user_info'] = this.info;

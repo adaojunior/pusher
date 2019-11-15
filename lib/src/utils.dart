@@ -4,7 +4,7 @@ import 'dart:convert';
 String hmac256(String secret, String toSign) {
   List<int> secretBytes = utf8.encode(secret);
   List<int> messageBytes = utf8.encode(toSign);
-  final hmac = new Hmac(sha256, secretBytes);
+  final hmac = Hmac(sha256, secretBytes);
   return hmac.convert(messageBytes).toString();
 }
 
