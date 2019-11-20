@@ -148,8 +148,10 @@ void main() {
     });
 
     test('Should get `/channels`', () async {
-      RequestResult result = await pusher.get('/channels');
+      GetResult result = await pusher.get('/channels');
       expect(result.status, 200);
+      expect(result.body, '{"channels":{}}');
+      expect(result.data, {'channels':{}});
     });
 
     test('.trigger() Should trigger events', () async {

@@ -92,12 +92,12 @@ This library allows you to query our API to retrieve information about your appl
 You can get a list of channels that are present within your application:
 
 ```dart
-RequestResult result = await pusher.get("/channels");
+GetResult result = await pusher.get("/channels");
 ```
 You can provide additional parameters to filter the list of channels that is returned.
 
 ```dart
-RequestResult result = await pusher.get("/channels", { "filter_by_prefix" : "presence-" } );
+GetResult result = await pusher.get("/channels", { "filter_by_prefix" : "presence-" } );
 ```
 
 #### Fetch channel information
@@ -105,14 +105,14 @@ RequestResult result = await pusher.get("/channels", { "filter_by_prefix" : "pre
 Retrive information about a single channel:
 
 ```dart
-RequestResult result = await pusher.get("/channels/my_channel");
+GetResult result = await pusher.get("/channels/my_channel");
 ```
 #### Fetch a list of users on a presence channel
 
 Retrive a list of users that are on a presence channel:
 
 ```dart
-RequestResult result = await pusher.get('/channels/presence-channel/users');
+GetResult result = await pusher.get('/channels/presence-channel/users');
 ```
 
 ## Documentation

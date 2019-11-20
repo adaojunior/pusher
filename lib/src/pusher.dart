@@ -70,22 +70,22 @@ class Pusher {
   ///
   /// ## List channels
   /// You can get a list of channels that are present within your application:
-  ///      Response result = await pusher.get("/channels");
+  ///      GetResult result = await pusher.get("/channels");
   /// You can provide additional parameters to filter the list of channels that is returned.
-  ///      Response result = await pusher.get("/channels", { filter_by_prefix = "presence-" } );
+  ///      GetResult result = await pusher.get("/channels", { filter_by_prefix = "presence-" } );
   /// ## Fetch channel information
   /// Retrive information about a single channel:
-  ///      Response result = await pusher.get("/channels/my_channel");
+  ///      GetResult result = await pusher.get("/channels/my_channel");
   /// ## Fetch a list of users on a presence channel
   /// Retrive a list of users that are on a presence channel:
-  ///      Response result = await pusher.get('/channels/presence-channel/users');
-  Future<RequestResult> get(String resource,
+  ///      GetResult result = await pusher.get('/channels/presence-channel/users');
+  Future<GetResult<T>> get<T>(String resource,
       [Map<String, String> parameters]) async {
     parameters = (parameters != null) ? parameters : Map<String, String>();
     Request request =
         _createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response = await request.send();
-    return RequestResult(response.statusCode, await response.stream.bytesToString());
+    return GetResult<T>(response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.

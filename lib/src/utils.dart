@@ -10,3 +10,5 @@ String hmac256(String secret, String toSign) {
 }
 
 String md5Hash(String data) => md5.convert(utf8.encode(data)).toString();
+
+bool isSuccessStatusCode(int code) => code >= 200 && code <= 299;
