@@ -1,14 +1,16 @@
-import 'package:http/http.dart' show Request, StreamedResponse;
-import 'dart:convert';
 import 'dart:async';
 import 'dart:collection';
-import 'validation.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart' show Request, StreamedResponse;
+
+import 'authentication_data.dart';
+import 'options.dart';
+import 'presence_channel_data.dart';
 import 'response.dart';
 import 'trigger.dart';
 import 'utils.dart';
-import 'presence_channel_data.dart';
-import 'options.dart';
-import 'authentication_data.dart';
+import 'validation.dart';
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
@@ -52,14 +54,15 @@ class Pusher {
   ///      String auth = pusher.authenticate('presence-test_channel', socketId, channelData);
   ///
   /// Throws a [JsonUnsupportedObjectError] if [PresenceChannelData] cannot be serialized
-  String authenticate(String channel, String socketId, [PresenceChannelData channelData]) {
+  String authenticate(String channel, String socketId,
+      [PresenceChannelData channelData]) {
     return AuthenticationData(
-      key: _key,
-      secret: _secret,
-      channel: channel,
-      socketId: socketId,
-      presenceData: channelData
-    ).toJson();
+            key: _key,
+            secret: _secret,
+            channel: channel,
+            socketId: socketId,
+            presenceData: channelData)
+        .toJson();
   }
 
   /// Allows you to query Pusher API to retrieve information about your application's channels,
@@ -82,8 +85,7 @@ class Pusher {
     Request request =
         _createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response = await request.send();
-    return Response(
-        response.statusCode, await response.stream.bytesToString());
+    return Response(response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.
@@ -110,8 +112,7 @@ class Pusher {
     Request request =
         _createAuthenticatedRequest('POST', "/events", null, body);
     StreamedResponse response = await request.send();
-    return Response(
-        response.statusCode, await response.stream.bytesToString());
+    return Response(response.statusCode, await response.stream.bytesToString());
   }
 
   int _secondsSinceEpoch() {
@@ -129,9 +130,8 @@ class Pusher {
   Request _createAuthenticatedRequest(String method, String resource,
       Map<String, String> parameters, TriggerBody body) {
     resource = resource.startsWith('/') ? resource.substring(1) : resource;
-    parameters = parameters == null
-        ? SplayTreeMap()
-        : SplayTreeMap.from(parameters);
+    parameters =
+        parameters == null ? SplayTreeMap() : SplayTreeMap.from(parameters);
     parameters['auth_key'] = this._key;
     parameters['auth_timestamp'] = _secondsSinceEpoch().toString();
     parameters['auth_version'] = '1.0';

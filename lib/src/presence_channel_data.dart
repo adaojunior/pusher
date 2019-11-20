@@ -14,7 +14,10 @@ class PresenceChannelData {
 
   get hasInfo => this.info != null;
 
-  Map toMap() => {'user_id': id, ...(hasInfo ? {'user_info': info} : {})};
+  Map toMap() => {
+        'user_id': id,
+        ...(hasInfo ? {'user_info': info} : {})
+      };
 
   String toJson() => json.encode(toMap());
 }
