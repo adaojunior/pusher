@@ -76,8 +76,8 @@ Using presence channels is similar to private channels, but in order to identify
 
 ```dart
  String socketId = '74124.3251944';
- User user = new User('1',{'name':'Adao'});
- String auth = pusher.authenticate('presence-test_channel',socketId,user);
+ PresenceChannelData channelData = new PresenceChannelData('1',{'name':'Adao'});
+ String auth = pusher.authenticate('presence-test_channel', socketId, channelData);
 ```
 It is possible to query the state of your Pusher application using the generic `pusher.get( resource )` method and overloads.
 

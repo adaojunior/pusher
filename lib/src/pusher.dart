@@ -1,13 +1,16 @@
-import 'package:http/http.dart' show Request, StreamedResponse;
-import 'dart:convert';
 import 'dart:async';
 import 'dart:collection';
-import 'validation.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart' show Request, StreamedResponse;
+
+import 'authentication_data.dart';
+import 'options.dart';
+import 'presence_channel_data.dart';
 import 'response.dart';
 import 'trigger.dart';
 import 'utils.dart';
-import 'user.dart';
-import 'options.dart';
+import 'validation.dart';
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
@@ -24,7 +27,7 @@ class Pusher {
     this._id = id;
     this._secret = secret;
     this._key = key;
-    this._options = options == null ? new PusherOptions() : options;
+    this._options = options == null ? PusherOptions() : options;
   }
 
   /// Authenticates the subscription request for a presence channel.
@@ -47,26 +50,19 @@ class Pusher {
   /// Using presence channels is similar to private channels, but in order to identify a user,
   /// clients are sent a user_id and, optionally, custom data.
   ///      String socketId = '74124.3251944';
-  ///      User user = new User('1',{'name':'Adao'});
-  ///      String auth = pusher.authenticate('presence-test_channel',socketId,user);
+  ///      PresenceChannelData channelData = PresenceChannelData('1',{'name':'Adao'});
+  ///      String auth = pusher.authenticate('presence-test_channel', socketId, channelData);
   ///
-  /// Throws a [JsonUnsupportedObjectError] if [User] cannot be serialized
-  String authenticate(String channel, String socketId, [User user]) {
-    validateChannelName(channel);
-    validateSocketId(socketId);
-    String signature;
-    String token;
-
-    if (user == null) {
-      signature = "$socketId:$channel";
-      token = "$_key:${hmac256(_secret, signature)}";
-      return json.encode({'auth': token});
-    } else {
-      String data = json.encode(user.toMap());
-      signature = "$socketId:$channel:$data";
-      token = "$_key:${hmac256(_secret, signature)}";
-      return json.encode({'auth': token, 'channel_data': data});
-    }
+  /// Throws a [JsonUnsupportedObjectError] if [PresenceChannelData] cannot be serialized
+  String authenticate(String channel, String socketId,
+      [PresenceChannelData channelData]) {
+    return AuthenticationData(
+            key: _key,
+            secret: _secret,
+            channel: channel,
+            socketId: socketId,
+            presenceData: channelData)
+        .toJson();
   }
 
   /// Allows you to query Pusher API to retrieve information about your application's channels,
@@ -76,7 +72,7 @@ class Pusher {
   /// You can get a list of channels that are present within your application:
   ///      Response result = await pusher.get("/channels");
   /// You can provide additional parameters to filter the list of channels that is returned.
-  ///      Response result = await pusher.get("/channels", new { filter_by_prefix = "presence-" } );
+  ///      Response result = await pusher.get("/channels", { filter_by_prefix = "presence-" } );
   /// ## Fetch channel information
   /// Retrive information about a single channel:
   ///      Response result = await pusher.get("/channels/my_channel");
@@ -85,12 +81,11 @@ class Pusher {
   ///      Response result = await pusher.get('/channels/presence-channel/users');
   Future<Response> get(String resource,
       [Map<String, String> parameters]) async {
-    parameters = (parameters != null) ? parameters : new Map<String, String>();
+    parameters = (parameters != null) ? parameters : Map<String, String>();
     Request request =
         _createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response = await request.send();
-    return new Response(
-        response.statusCode, await response.stream.bytesToString());
+    return Response(response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.
@@ -101,10 +96,10 @@ class Pusher {
   ///      Response response = await pusher.trigger(['test_channel'],'my_event',data);
   Future<Response> trigger(List<String> channels, String event, Map data,
       [TriggerOptions options]) {
-    options = options == null ? new TriggerOptions() : options;
+    options = options == null ? TriggerOptions() : options;
     validateListOfChannelNames(channels);
     validateSocketId(options.socketId);
-    TriggerBody body = new TriggerBody(
+    TriggerBody body = TriggerBody(
         name: event,
         data: data.toString(),
         channels: channels,
@@ -117,12 +112,11 @@ class Pusher {
     Request request =
         _createAuthenticatedRequest('POST', "/events", null, body);
     StreamedResponse response = await request.send();
-    return new Response(
-        response.statusCode, await response.stream.bytesToString());
+    return Response(response.statusCode, await response.stream.bytesToString());
   }
 
   int _secondsSinceEpoch() {
-    return (new DateTime.now().toUtc().millisecondsSinceEpoch * 0.001).toInt();
+    return (DateTime.now().toUtc().millisecondsSinceEpoch * 0.001).toInt();
   }
 
   String _mapToQueryString(Map<String, String> params) {
@@ -136,9 +130,8 @@ class Pusher {
   Request _createAuthenticatedRequest(String method, String resource,
       Map<String, String> parameters, TriggerBody body) {
     resource = resource.startsWith('/') ? resource.substring(1) : resource;
-    parameters = parameters == null
-        ? new SplayTreeMap()
-        : new SplayTreeMap.from(parameters);
+    parameters =
+        parameters == null ? SplayTreeMap() : SplayTreeMap.from(parameters);
     parameters['auth_key'] = this._key;
     parameters['auth_timestamp'] = _secondsSinceEpoch().toString();
     parameters['auth_version'] = '1.0';
@@ -155,7 +148,7 @@ class Pusher {
 
     Uri uri = Uri.parse(
         "${_options.getBaseUrl()}$path?$queryString&auth_signature=$authSignature");
-    Request request = new Request(method, uri);
+    Request request = Request(method, uri);
     request.headers['Content-Type'] = 'application/json';
     if (body != null) {
       request.body = body.toJson();

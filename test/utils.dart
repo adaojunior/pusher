@@ -1,6 +1,5 @@
-
 String strRepeat(String piece, int multiplier) {
-  return new List<String>.filled(multiplier, 'a').join('');
+  return List<String>.filled(multiplier, 'a').join('');
 }
 
 List listOfInvalidSocketId() {
@@ -15,7 +14,7 @@ List listOfInvalidSocketId() {
   ];
 }
 
-List listOfInvalidChannelsName(){
+List listOfInvalidChannelsName() {
   return [
     'private-channel:', //Channel must not have trailing colon,
     ':private-channel', //Channel name must not have leading colon,
