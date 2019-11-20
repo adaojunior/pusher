@@ -1,17 +1,12 @@
 /// Base class for all request results
 class RequestResult {
-  final int _status;
-  final String _body;
+  /// HttpStatus
+  final int status;
 
-  RequestResult(int status, String message)
-      : _status = status,
-        _body = message;
+  /// Request body.
+  final String body;
 
-  /// HttpStatus.
-  int get status => this._status;
-
-  /// Request Body.
-  String get body => this._body;
+  RequestResult(this.status, this.body);
 
   /// Request body.
   @override
