@@ -1,19 +1,19 @@
-/// Response of a resource request
+/// Base class for all request results
 class RequestResult {
   final int _status;
-  final String _message;
+  final String _body;
 
   RequestResult(int status, String message)
       : _status = status,
-        _message = message;
+        _body = message;
 
   /// HttpStatus.
   int get status => this._status;
 
   /// Request Body.
-  String get message => this._message;
+  String get body => this._body;
 
   /// Request body.
   @override
-  String toString() => this.message;
+  String toString() => this.body;
 }

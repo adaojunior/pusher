@@ -132,7 +132,7 @@ void main() {
     });
 
     test('Should get `message`', () {
-      expect(result.message, message);
+      expect(result.body, message);
     });
 
     test('.toString()', () {
