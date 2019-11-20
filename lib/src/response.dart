@@ -1,9 +1,9 @@
 /// Response of a resource request
-class Response {
+class RequestResult {
   final int _status;
   final String _message;
 
-  Response(int status, String message)
+  RequestResult(int status, String message)
       : _status = status,
         _message = message;
 

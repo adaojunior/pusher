@@ -117,14 +117,14 @@ void main() {
   });
 
   group('Response', () {
-    Response result;
+    RequestResult result;
     int status;
     String message;
 
     setUp(() {
       status = 200;
       message = '{}';
-      result = Response(status, message);
+      result = RequestResult(status, message);
     });
 
     test('Should get `status`', () {
@@ -148,12 +148,12 @@ void main() {
     });
 
     test('Should get `/channels`', () async {
-      Response result = await pusher.get('/channels');
+      RequestResult result = await pusher.get('/channels');
       expect(result.status, 200);
     });
 
     test('.trigger() Should trigger events', () async {
-      Response respose = await pusher.trigger(
+      RequestResult respose = await pusher.trigger(
           ['channel-test'], 'event-test', {'message': 'Hello World!'});
       expect(respose.status, 200);
     });

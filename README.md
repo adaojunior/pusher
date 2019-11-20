@@ -16,7 +16,7 @@ import 'package:pusher/pusher.dart';
 main() async {
   Pusher pusher = new Pusher('PUSHER_APP_ID','PUSHER_APP_KEY','PUSHER_APP_SECRET');
   Map data = {'message':'Hello world'};
-  Response response = await pusher.trigger(['test_channel'],'my_event',data);
+  RequestResult response = await pusher.trigger(['test_channel'],'my_event',data);
 }
 
 ```
@@ -50,7 +50,7 @@ Pusher pusher = new Pusher(
 It is possible to trigger an event on one or more channels. Channel names can contain only characters which are alphanumeric, `_` or `-``. Event name can be at most 200 characters long too.
 
 ```dart
- Response response = await pusher.trigger(['test_channel'],'my_event',data);
+ RequestResult response = await pusher.trigger(['test_channel'],'my_event',data);
 ```
 
 ### Authenticating Channels
@@ -92,12 +92,12 @@ This library allows you to query our API to retrieve information about your appl
 You can get a list of channels that are present within your application:
 
 ```dart
-Response result = await pusher.get("/channels");
+RequestResult result = await pusher.get("/channels");
 ```
 You can provide additional parameters to filter the list of channels that is returned.
 
 ```dart
-Response result = await pusher.get("/channels", { "filter_by_prefix" : "presence-" } );
+RequestResult result = await pusher.get("/channels", { "filter_by_prefix" : "presence-" } );
 ```
 
 #### Fetch channel information
@@ -105,14 +105,14 @@ Response result = await pusher.get("/channels", { "filter_by_prefix" : "presence
 Retrive information about a single channel:
 
 ```dart
-Response result = await pusher.get("/channels/my_channel");
+RequestResult result = await pusher.get("/channels/my_channel");
 ```
 #### Fetch a list of users on a presence channel
 
 Retrive a list of users that are on a presence channel:
 
 ```dart
-Response result = await pusher.get('/channels/presence-channel/users');
+RequestResult result = await pusher.get('/channels/presence-channel/users');
 ```
 
 ## Documentation

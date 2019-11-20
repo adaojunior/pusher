@@ -79,13 +79,13 @@ class Pusher {
   /// ## Fetch a list of users on a presence channel
   /// Retrive a list of users that are on a presence channel:
   ///      Response result = await pusher.get('/channels/presence-channel/users');
-  Future<Response> get(String resource,
+  Future<RequestResult> get(String resource,
       [Map<String, String> parameters]) async {
     parameters = (parameters != null) ? parameters : Map<String, String>();
     Request request =
         _createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response = await request.send();
-    return Response(response.statusCode, await response.stream.bytesToString());
+    return RequestResult(response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.
@@ -94,7 +94,7 @@ class Pusher {
   ///
   /// ## Triggering events
   ///      Response response = await pusher.trigger(['test_channel'],'my_event',data);
-  Future<Response> trigger(List<String> channels, String event, Map data,
+  Future<RequestResult> trigger(List<String> channels, String event, Map data,
       [TriggerOptions options]) {
     options = options == null ? TriggerOptions() : options;
     validateListOfChannelNames(channels);
@@ -107,12 +107,12 @@ class Pusher {
     return _executeTrigger(channels, event, body);
   }
 
-  Future<Response> _executeTrigger(
+  Future<RequestResult> _executeTrigger(
       List<String> channels, String event, TriggerBody body) async {
     Request request =
         _createAuthenticatedRequest('POST', "/events", null, body);
     StreamedResponse response = await request.send();
-    return Response(response.statusCode, await response.stream.bytesToString());
+    return RequestResult(response.statusCode, await response.stream.bytesToString());
   }
 
   int _secondsSinceEpoch() {
