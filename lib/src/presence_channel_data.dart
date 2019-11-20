@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Information about a user who is subscribing to a presence channel.
 class PresenceChannelData {
   /// A unique user identifier for the user within the application.
@@ -10,12 +12,9 @@ class PresenceChannelData {
 
   PresenceChannelData(this.id, [this.info]);
 
-  Map toMap() {
-    Map map = Map();
-    map['user_id'] = this.id;
-    if (this.info != null) {
-      map['user_info'] = this.info;
-    }
-    return map;
-  }
+  get hasInfo => this.info != null;
+
+  Map toMap() => {'user_id': id, ...(hasInfo ? {'user_info': info} : {})};
+
+  String toJson() => json.encode(toMap());
 }

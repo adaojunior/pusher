@@ -8,6 +8,7 @@ import 'trigger.dart';
 import 'utils.dart';
 import 'presence_channel_data.dart';
 import 'options.dart';
+import 'authentication_data.dart';
 
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
@@ -52,21 +53,13 @@ class Pusher {
   ///
   /// Throws a [JsonUnsupportedObjectError] if [PresenceChannelData] cannot be serialized
   String authenticate(String channel, String socketId, [PresenceChannelData channelData]) {
-    validateChannelName(channel);
-    validateSocketId(socketId);
-    String signature;
-    String token;
-
-    if (channelData == null) {
-      signature = "$socketId:$channel";
-      token = "$_key:${hmac256(_secret, signature)}";
-      return json.encode({'auth': token});
-    } else {
-      String data = json.encode(channelData.toMap());
-      signature = "$socketId:$channel:$data";
-      token = "$_key:${hmac256(_secret, signature)}";
-      return json.encode({'auth': token, 'channel_data': data});
-    }
+    return AuthenticationData(
+      key: _key,
+      secret: _secret,
+      channel: channel,
+      socketId: socketId,
+      presenceData: channelData
+    ).toJson();
   }
 
   /// Allows you to query Pusher API to retrieve information about your application's channels,

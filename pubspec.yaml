@@ -8,5 +8,6 @@ environment:
 dependencies:
   crypto: "^2.1.3"
   http: "^0.12.0+2"
+  meta: "^1.1.8"
 dev_dependencies:
   test: '^1.9.4'
