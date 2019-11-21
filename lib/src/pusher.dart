@@ -57,11 +57,11 @@ class Pusher {
   AuthenticationData authenticate(String channel, String socketId,
       [PresenceChannelData channelData]) {
     return AuthenticationData(
-            key: _key,
-            secret: _secret,
-            channel: channel,
-            socketId: socketId,
-            presenceData: channelData);
+        key: _key,
+        secret: _secret,
+        channel: channel,
+        socketId: socketId,
+        presenceData: channelData);
   }
 
   /// Allows you to query Pusher API to retrieve information about your application's channels,
@@ -84,7 +84,8 @@ class Pusher {
     Request request =
         _createAuthenticatedRequest('GET', resource, parameters, null);
     StreamedResponse response = await request.send();
-    return GetResult<T>(response.statusCode, await response.stream.bytesToString());
+    return GetResult<T>(
+        response.statusCode, await response.stream.bytesToString());
   }
 
   /// Triggers an event on one or more channels.
@@ -111,7 +112,8 @@ class Pusher {
     Request request =
         _createAuthenticatedRequest('POST', "/events", null, body);
     StreamedResponse response = await request.send();
-    return RequestResult(response.statusCode, await response.stream.bytesToString());
+    return RequestResult(
+        response.statusCode, await response.stream.bytesToString());
   }
 
   int _secondsSinceEpoch() {
