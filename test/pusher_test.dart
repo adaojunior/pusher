@@ -192,10 +192,11 @@ void main() {
     test('Should authenticate socketId', () {
       String key = 'thisisaauthkey';
       Pusher instance = Pusher('1', key, 'thisisasecret');
-      String auth = instance.authenticate('test_channel', '74124.3251944');
-      String expected =
-          '{"auth":"$key:f8390ffe4df18cc755d3191b9db75182c71354e0b3ad7be1d186ac86f3c0fc4b"}';
-      expect(auth, expected);
+      AuthenticationData auth = instance.authenticate('test_channel', '74124.3251944');
+      Map expected = {'auth': "$key:f8390ffe4df18cc755d3191b9db75182c71354e0b3ad7be1d186ac86f3c0fc4b"};
+      expect(auth.toString(), json.encode(expected));
+      expect(auth.toJson(), json.encode(expected));
+      expect(auth.toMap(), expected);
     });
 
     test('Should authenticate presence', () {
@@ -208,7 +209,7 @@ void main() {
 
       expect(
           instance.authenticate(
-              channel, socketId, PresenceChannelData(userId, userInfo)),
+              channel, socketId, PresenceChannelData(userId, userInfo)).toString(),
           json.encode({
             "auth":
                 "$key:ca6b9a5d11a7b5909eef43f49cba4c64a083c9298c9b1dc75c4073c0f4e7d2e2",
@@ -219,7 +220,7 @@ void main() {
           }));
 
       expect(
-          instance.authenticate(channel, socketId, PresenceChannelData(userId)),
+          instance.authenticate(channel, socketId, PresenceChannelData(userId)).toString(),
           json.encode({
             "auth":
                 "$key:048b6b48bdf0302132ab7742cb5552c7bdb9aacb66c7c5e543ff49db8f7a33cf",

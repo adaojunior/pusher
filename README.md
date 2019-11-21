@@ -67,7 +67,7 @@ For more information see [docs](http://pusher.com/docs/authenticating_users).
 
 ```dart
  String socketId = '74124.3251944';
- String auth = pusher.authenticate('test_channel',socketId);
+ AuthenticationData auth = pusher.authenticate('test_channel',socketId);
 ```
 
 #### Authenticating presence channels
@@ -77,7 +77,7 @@ Using presence channels is similar to private channels, but in order to identify
 ```dart
  String socketId = '74124.3251944';
  PresenceChannelData channelData = new PresenceChannelData('1',{'name':'Adao'});
- String auth = pusher.authenticate('presence-test_channel', socketId, channelData);
+ AuthenticationData auth = pusher.authenticate('presence-test_channel', socketId, channelData);
 ```
 It is possible to query the state of your Pusher application using the generic `pusher.get( resource )` method and overloads.
 

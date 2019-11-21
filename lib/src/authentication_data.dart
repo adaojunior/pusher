@@ -49,4 +49,7 @@ class AuthenticationData {
   }
 
   String toJson() => json.encode(toMap());
+
+  @override
+  String toString() => toJson();
 }

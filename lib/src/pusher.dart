@@ -44,25 +44,24 @@ class Pusher {
   /// ## Private channels
   ///
   ///      String socketId = '74124.3251944';
-  ///      String auth = pusher.authenticate('test_channel',socketId);
+  ///      AuthenticationData auth = pusher.authenticate('test_channel',socketId);
   /// ##  Authenticating presence channels
   ///
   /// Using presence channels is similar to private channels, but in order to identify a user,
   /// clients are sent a user_id and, optionally, custom data.
   ///      String socketId = '74124.3251944';
   ///      PresenceChannelData channelData = PresenceChannelData('1',{'name':'Adao'});
-  ///      String auth = pusher.authenticate('presence-test_channel', socketId, channelData);
+  ///      AuthenticationData auth = pusher.authenticate('presence-test_channel', socketId, channelData);
   ///
   /// Throws a [JsonUnsupportedObjectError] if [PresenceChannelData] cannot be serialized
-  String authenticate(String channel, String socketId,
+  AuthenticationData authenticate(String channel, String socketId,
       [PresenceChannelData channelData]) {
     return AuthenticationData(
             key: _key,
             secret: _secret,
             channel: channel,
             socketId: socketId,
-            presenceData: channelData)
-        .toJson();
+            presenceData: channelData);
   }
 
   /// Allows you to query Pusher API to retrieve information about your application's channels,
