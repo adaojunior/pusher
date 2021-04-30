@@ -9,9 +9,9 @@ import 'dart:convert' show json , JsonUnsupportedObjectError;
 import 'dart:io' show Platform;
 import 'utils.dart' as utils;
 
-final String pusherAppId = Platform.environment['PUSHER_APP_ID'];
-final String pusherAppKey = Platform.environment['PUSHER_APP_KEY'];
-final String pusherAppSecret = Platform.environment['PUSHER_APP_SECRET'];
+final String? pusherAppId = Platform.environment['PUSHER_APP_ID'];
+final String? pusherAppKey = Platform.environment['PUSHER_APP_KEY'];
+final String? pusherAppSecret = Platform.environment['PUSHER_APP_SECRET'];
 
 void main() {
   group('PusherOptions', () {
@@ -44,8 +44,8 @@ void main() {
   });
 
   group('TriggerOptions', () {
-    TriggerOptions options;
-    String socketId;
+    late TriggerOptions options;
+    late String socketId;
 
     setUp(() {
       socketId = '444.444';
@@ -58,11 +58,11 @@ void main() {
   });
 
   group('TriggerBody', () {
-    TriggerBody body;
-    String name;
-    String data;
-    List<String> channels;
-    String socketId;
+    late TriggerBody body;
+    late String name;
+    late String data;
+    late List<String> channels;
+    late String socketId;
 
     setUp(() {
       name = 'my-event';
@@ -104,9 +104,9 @@ void main() {
   });
 
   group('Response', () {
-    Response result;
-    int status;
-    String message;
+    late Response result;
+    late int status;
+    late String message;
 
     setUp(() {
       status = 200;
@@ -129,7 +129,7 @@ void main() {
   });
 
   group('Pusher', () {
-    Pusher pusher;
+    late Pusher pusher;
 
     setUp(() {
       pusher = new Pusher(pusherAppId, pusherAppKey, pusherAppSecret);
@@ -227,7 +227,7 @@ void main() {
             "boolean":true,
             "aObjectInstance":instance
           })),
-          throwsA(predicate((e) => e is JsonUnsupportedObjectError))
+          throwsA(predicate((dynamic e) => e is JsonUnsupportedObjectError))
       );
 
     });

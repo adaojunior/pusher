@@ -12,15 +12,15 @@ import 'options.dart';
 /// Provides access to functionality within the Pusher service such as Trigger to trigger events
 /// and authenticating subscription requests to private and presence channels.
 class Pusher {
-  String _id;
+  String? _id;
 
-  String _key;
+  String? _key;
 
-  String _secret;
+  String? _secret;
 
-  PusherOptions _options;
+  late PusherOptions _options;
 
-  Pusher(String id, String key, String secret, [PusherOptions options]) {
+  Pusher(String? id, String? key, String? secret, [PusherOptions? options]) {
     this._id = id;
     this._secret = secret;
     this._key = key;
@@ -51,7 +51,7 @@ class Pusher {
   ///      String auth = pusher.authenticate('presence-test_channel',socketId,user);
   ///
   /// Throws a [JsonUnsupportedObjectError] if [User] cannot be serialized
-  String authenticate(String channel, String socketId, [User user]) {
+  String authenticate(String channel, String socketId, [User? user]) {
     validateChannelName(channel);
     validateSocketId(socketId);
     String signature;
@@ -59,12 +59,12 @@ class Pusher {
 
     if (user == null) {
       signature = "$socketId:$channel";
-      token = "$_key:${hmac256(_secret, signature)}";
+      token = "$_key:${hmac256(_secret!, signature)}";
       return json.encode({'auth': token});
     } else {
       String data = json.encode(user.toMap());
       signature = "$socketId:$channel:$data";
-      token = "$_key:${hmac256(_secret, signature)}";
+      token = "$_key:${hmac256(_secret!, signature)}";
       return json.encode({'auth': token, 'channel_data': data});
     }
   }
@@ -84,7 +84,7 @@ class Pusher {
   /// Retrive a list of users that are on a presence channel:
   ///      Response result = await pusher.get('/channels/presence-channel/users');
   Future<Response> get(String resource,
-      [Map<String, String> parameters]) async {
+      [Map<String, String>? parameters]) async {
     parameters = (parameters != null) ? parameters : new Map<String, String>();
     Request request =
         _createAuthenticatedRequest('GET', resource, parameters, null);
@@ -100,7 +100,7 @@ class Pusher {
   /// ## Triggering events
   ///      Response response = await pusher.trigger(['test_channel'],'my_event',data);
   Future<Response> trigger(List<String> channels, String event, Map data,
-      [TriggerOptions options]) {
+      [TriggerOptions? options]) {
     options = options == null ? new TriggerOptions() : options;
     validateListOfChannelNames(channels);
     validateSocketId(options.socketId);
@@ -134,12 +134,12 @@ class Pusher {
   }
 
   Request _createAuthenticatedRequest(String method, String resource,
-      Map<String, String> parameters, TriggerBody body) {
+      Map<String, String>? parameters, TriggerBody? body) {
     resource = resource.startsWith('/') ? resource.substring(1) : resource;
     parameters = parameters == null
         ? new SplayTreeMap()
         : new SplayTreeMap.from(parameters);
-    parameters['auth_key'] = this._key;
+    parameters['auth_key'] = this._key!;
     parameters['auth_timestamp'] = _secondsSinceEpoch().toString();
     parameters['auth_version'] = '1.0';
 
@@ -151,7 +151,7 @@ class Pusher {
     String path = "/apps/${this._id}/$resource";
     String toSign = "$method\n$path\n$queryString";
 
-    String authSignature = hmac256(this._secret, toSign);
+    String authSignature = hmac256(this._secret!, toSign);
 
     Uri uri = Uri.parse(
         "${_options.getBaseUrl()}$path?$queryString&auth_signature=$authSignature");
