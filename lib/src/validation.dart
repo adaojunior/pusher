@@ -6,7 +6,7 @@ final RegExp channelNameRegex = new RegExp(r'^[A-Za-z0-9_\-=@,.;]+$');
 final int channelNameMaxLength = 164;
 
 /// Validate a socket_id value
-void validateSocketId(String socketId) {
+void validateSocketId(String? socketId) {
   if (socketId != null && socketIdRegex.hasMatch(socketId) == false)
     throw new FormatException(
         "socket_id $socketId was not in the form: ${socketIdRegex.toString()}");

@@ -6,7 +6,7 @@ class User {
   final String id;
 
   /// Arbitrary additional information about the user.
-  final Map<String, dynamic> info;
+  final Map<String, dynamic>? info;
 
   User(this.id, [this.info]);
 
